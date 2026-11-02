@@ -349,7 +349,7 @@ body.guest-mode #visitor .instructor-zone { padding-block: 88px; background: var
 #visitor .sk-inst-layout h2 { max-width: 540px; margin: 0 0 25px; font-size: clamp(30px, 3.4vw, 43px); line-height: 1.12; }
 #visitor .sk-inst-layout p { max-width: 530px; font-size: 14px; line-height: 1.85; }
 #visitor .sk-inst-layout > div > p + p { margin-top: 17px; }
-body.guest-mode #visitor .sk-inst-aside { padding: 26px; border-color: var(--sk-line) !important; border-radius: 6px; background: #fff !important; overflow: hidden; }
+body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify-self: center; padding: 26px; border-color: var(--sk-line) !important; border-radius: 6px; background: #fff !important; overflow: hidden; }
 #visitor .sk-aside-photo { height: auto; margin: -26px -26px 25px; border-bottom: 1px solid var(--sk-line); }
 #visitor .sk-aside-photo img { display: block; width: 100%; height: auto; object-fit: contain; }
 #visitor .sk-inst-aside b { display: block; margin-bottom: 12px; font-size: 18px; font-weight: 650; line-height: 1.4; letter-spacing: -.015em; }
