@@ -258,11 +258,11 @@ body.guest-mode #visitor .hero-photo-wrap {
   justify-content: center;
   align-self: center;
   width: 100%;
-  height: 430px;
+  height: auto;
   min-height: 0;
   max-height: none;
   margin: 0;
-  padding: 0 0 40px;
+  padding: 18px 0 40px;
   overflow: hidden;
   border: 0;
   border-radius: 8px;
@@ -377,7 +377,6 @@ body.guest-mode #visitor .sk-inst-aside { padding: 26px; border-color: var(--sk-
   #visitor .sitenav a, #visitor .panel-btn { font-size: 11px; }
   #visitor .panel-btn { padding-inline: 13px; }
   body.guest-mode #visitor .hero-content { gap: 40px; min-height: 545px; padding-block: 50px; }
-  body.guest-mode #visitor .hero-photo-wrap { height: 390px; }
   #visitor .split-heading, #visitor .sk-inst-layout, #visitor .sk-inline-section { gap: 45px; }
   #visitor .proof-inner > div { padding-inline: 18px; }
 }
@@ -399,7 +398,6 @@ body.guest-mode #visitor .sk-inst-aside { padding: 26px; border-color: var(--sk-
   body.guest-mode #visitor .hero-text { order: 2; }
   body.guest-mode #visitor .hero-text h1 { font-size: clamp(36px, 5vw, 46px); }
   body.guest-mode #visitor .hero-text p { font-size: 14px; }
-  body.guest-mode #visitor .hero-photo-wrap { height: 350px; }
   #visitor .hero-actions { gap: 10px; }
   #visitor .hero-actions button { padding: 12px 15px; font-size: 11px; }
   #visitor .proof-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); }
