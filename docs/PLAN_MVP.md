@@ -1,0 +1,30 @@
+# Plan STOP KRWOTOKOM - bez rozbudowy ponad potrzeby
+
+## Etap 1 - prezentacja online
+- Publikacja istniejącej strony i demonstracyjnego panelu na GitHub Pages.
+- Poprawienie drobnych tekstów i responsywności, bez przebudowy stylistyki.
+- Zachowanie nazewnictwa: Kurs STOP KRWOTOKOM, Kurs instruktorski STOP KRWOTOKOM.
+- Kafelek „Centra szkoleniowe” otwiera wykaz licencjonowanych ośrodków w nowej karcie.
+
+## Etap 2 - uporządkowanie aplikacji
+- Wydzielenie strony publicznej i panelu do oddzielnych tras/widoków, bez duplikowania kodu.
+- Uporządkowanie komponentów i usunięcie demonstracyjnych danych przed produkcją.
+
+## Etap 3 - dostęp instruktorów
+- Supabase Auth: potwierdzenie adresu i logowanie kodem e-mail.
+- Role: gość, kandydat, instruktor, koordynator ośrodka, administrator.
+- Zatwierdzanie autoryzacji przez administratora; bezpieczna autoryzacja na serwerze i polityki RLS.
+- Jedno konto i stałe ID instruktora; osobno: certyfikacja i autoryzacja.
+
+## Etap 4 - kursy i certyfikaty
+- Zapisy kursów i list uczestników.
+- Bieżąca ewaluacja wymaganych ćwiczeń kursanta, bez egzaminu końcowego.
+- Certyfikaty kursantów z unikalnym tokenem QR; współoznaczenie ośrodka.
+- Biblioteka tylko dla autoryzowanych instruktorów, materiały poza publicznym Pages.
+
+## Niezmienne decyzje programowe
+- Kurs stacjonarny kontrola krwotoków, także bez apteczki i u dzieci.
+- Bez modułu SALT/segregacji wielu poszkodowanych w kursie podstawowym.
+- Bez improwizowanych opasek uciskowych.
+- Kursanci: ewaluacja bieżąca; instruktorzy: egzamin teoretyczny, praktyczny i dydaktyczny.
+- Licencjonowany ośrodek: minimum 2 instruktorów, w tym 1 ratownik medyczny i 1 ratownik KPP; koordynator: ratownik medyczny, autoryzowany instruktor.
