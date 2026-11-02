@@ -345,13 +345,13 @@ body.guest-mode #visitor .hero-photo-wrap img.sk-cutout-photo {
 #visitor .sk-proof-figure figcaption { padding: 38px 22px 20px; font-size: 12px; font-weight: 500; background: linear-gradient(transparent, #161c22bf); }
 
 body.guest-mode #visitor .instructor-zone { padding-block: 88px; background: var(--sk-paper) !important; border-block: 1px solid var(--sk-line); }
-#visitor .sk-inst-layout { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: 85px; }
+#visitor .sk-inst-layout { display: grid; grid-template-columns: 1.1fr 1fr; align-items: start; gap: 85px; }
 #visitor .sk-inst-layout h2 { max-width: 540px; margin: 0 0 25px; font-size: clamp(30px, 3.4vw, 43px); line-height: 1.12; }
 #visitor .sk-inst-layout p { max-width: 530px; font-size: 14px; line-height: 1.85; }
 #visitor .sk-inst-layout > div > p + p { margin-top: 17px; }
 body.guest-mode #visitor .sk-inst-aside { padding: 26px; border-color: var(--sk-line) !important; border-radius: 6px; background: #fff !important; overflow: hidden; }
-#visitor .sk-aside-photo { height: 255px; margin: -26px -26px 25px; border-bottom: 1px solid var(--sk-line); }
-#visitor .sk-aside-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+#visitor .sk-aside-photo { height: auto; margin: -26px -26px 25px; border-bottom: 1px solid var(--sk-line); }
+#visitor .sk-aside-photo img { display: block; width: 100%; height: auto; object-fit: contain; }
 #visitor .sk-inst-aside b { display: block; margin-bottom: 12px; font-size: 18px; font-weight: 650; line-height: 1.4; letter-spacing: -.015em; }
 #visitor .sk-inst-aside .button { margin-top: 20px; }
 #visitor .sk-inline-section { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 85px; }
@@ -418,7 +418,6 @@ body.guest-mode #visitor .sk-inst-aside { padding: 26px; border-color: var(--sk-
   #visitor .sk-inst-layout p { max-width: none; }
   body.guest-mode #visitor .instructor-zone { padding-block: 65px; }
   #visitor .sk-inst-aside { max-width: 650px; }
-  #visitor .sk-aside-photo { height: 290px; }
   #visitor .sk-inline-section p { max-width: 650px; }
   #visitor .sk-photo-proof { gap: 14px !important; }
   #visitor .sk-proof-figure { height: 240px !important; }
@@ -458,7 +457,7 @@ body.guest-mode #visitor .sk-inst-aside { padding: 26px; border-color: var(--sk-
   #visitor .sk-proof-figure figcaption { padding: 35px 20px 17px; font-size: 11px; }
   body.guest-mode #visitor .instructor-zone { padding-block: 55px; }
   body.guest-mode #visitor .sk-inst-aside { padding: 23px; }
-  #visitor .sk-aside-photo { height: 235px; margin: -23px -23px 23px; }
+  #visitor .sk-aside-photo { margin: -23px -23px 23px; }
   #visitor .sk-inst-aside b { font-size: 17px; }
   #visitor .sk-footer { flex-direction: column; gap: 30px; }
   #visitor .sk-footer > div:last-child { text-align: left; }
