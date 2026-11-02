@@ -348,6 +348,9 @@ body.guest-mode #visitor .hero-photo-wrap img.sk-cutout-photo {
 #visitor .sk-photo-proof { gap: 20px !important; margin-top: 35px !important; }
 #visitor .sk-proof-figure { height: 280px !important; margin: 0; border-radius: 6px !important; background: var(--sk-paper); box-shadow: none; }
 #visitor .sk-proof-figure img { filter: saturate(.88) contrast(1.02); }
+#visitor .sk-proof-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: minmax(0, 1fr); gap: 4px; }
+#visitor .sk-proof-pair-photo { min-width: 0; min-height: 0; overflow: hidden; }
+#visitor .sk-proof-pair img.sk-proof-room { object-position: center 72% !important; }
 #visitor .sk-proof-figure figcaption { padding: 38px 22px 20px; font-size: 12px; font-weight: 500; background: linear-gradient(transparent, #161c22bf); }
 
 body.guest-mode #visitor .instructor-zone { padding-block: 88px; background: var(--sk-paper) !important; border-block: 1px solid var(--sk-line); }
