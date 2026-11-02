@@ -119,14 +119,24 @@ function togglePass(id,i,val){let p=people.find(p=>p.id===id);if(!p)return;p.q[i
 function issue(id){let p=people.find(p=>p.id===id);if(!p||!p.q.every(Boolean))return;const ids=people.map(p=>p.cert).filter(Boolean).map(x=>parseInt(x.slice(-4),10)||0);p.cert=`SK-R-2026-${String(Math.max(0,...ids)+1).padStart(4,'0')}`;draw();showCertificate(id);}
 function showCertificate(id){let p=people.find(p=>p.id===id);if(!p||!p.cert)return;const course=courses.find(c=>c.id===p.courseId);modal('Certyfikat — wyłącznie wzór demonstracyjny',`<div class="certificate"><div class="eyebrow">STOP KRWOTOKOM</div><div class="huge">CERTYFIKAT</div><b>ukończenia szkolenia</b><div class="redbar"></div><p>Potwierdza się, że</p><strong class="name">${mk(p.name)}</strong><p>ukończył(a) szkolenie <b>${mk(course?.title||'STOP KRWOTOKOM')}</b> i wykonał(a) wymagane ćwiczenia praktyczne.</p><div class="redbar"></div><p>Instruktor prowadzący: <b>SK-I-2026-0001</b> · Data: ${dateFormat(course.date)}</p><p style="margin-top:8px;font-size:11px">Na rzeczywistym certyfikacie: indywidualny kod QR do weryfikacji. Bez widocznego numeru certyfikatu.</p><p style="margin-top:14px;font-size:11px">Dokument demonstracyjny, nieważny w rzeczywistym obrocie.</p></div><div class="inline-actions" style="justify-content:flex-end;margin-top:18px"><button class="button secondary" onclick="closeModal()">Zamknij</button><button class="button" onclick="window.print()">Drukuj wzór</button></div>`);}
 function verifyCode(){const id=document.getElementById('verifycode').value.trim().toUpperCase();const ok=id==='SK-I-2026-0001';document.getElementById('verifyout').innerHTML=ok?`<div class="notice"><span class="tag green">Status demonstracyjny: aktywny</span><h3 style="margin-top:12px">${mk(id)}</h3><p>Przykładowy instruktor · program STOP KRWOTOKOM. To symulacja, nie prawdziwa weryfikacja.</p></div>`:`<div class="notice"><span class="tag red">Brak wpisu w demonstracji</span><p style="margin-top:8px">Sprawdzenie faktycznych uprawnień będzie możliwe dopiero po podłączeniu bazy.</p></div>`;}
-function scrollPublic(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'});}
+function setPublicMenu(open){
+  document.getElementById('mainPublicNav')?.classList.toggle('open',open);
+  document.querySelector('.mobile-menu-btn')?.setAttribute('aria-expanded',String(open));
+}
+function togglePublicMenu(){
+  setPublicMenu(!document.getElementById('mainPublicNav')?.classList.contains('open'));
+}
+function scrollPublic(id){
+  setPublicMenu(false);
+  document.getElementById(id)?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+}
 // Jednoznaczne sterowanie strefą publiczną i panelem — bez pozostawiania stylów inline.
 function setPortalMode(panel){
   const visitor=document.getElementById('visitor');
   visitor.style.removeProperty('display');
   document.querySelector('.shell').style.removeProperty('display');
   document.body.classList.toggle('guest-mode',!panel);
-  document.getElementById('mainPublicNav')?.classList.remove('open');
+  setPublicMenu(false);
 }
 function showPanel(tab='home', updateAddress=true){
   closeModal();
@@ -166,7 +176,10 @@ function showSignupDemo(){modal('Jak będzie działał zapis',`<div class="modul
 
 function showMaterialSample(which){const title=which==='skrypt'?'Przykładowy skrypt kursanta':'Przykładowa karta zaliczenia';const content=which==='skrypt'?['Bezpieczeństwo i wezwanie pomocy','Rozpoznawanie masywnych krwotoków','Ucisk bezpośredni i opaska uciskowa','Wypełnianie ran treningowych','Specyfika kontroli krwotoków u dzieci']:['Ocena bezpieczeństwa i alarmowanie','Założenie opaski uciskowej i ocena skuteczności','Ucisk bezpośredni i wypełnianie rany','Ucisk bezpośredni z użyciem dostępnej odzieży','Obserwacja ćwiczeń i korekta błędów'];modal(title,`<p>To podgląd zakresu planowanych materiałów. Pełne pliki PDF nie są jeszcze podłączone.</p><div class="card" style="margin-top:20px"><h3>Zawartość pakietu</h3>${content.map((t,i)=>`<div class="module"><span class="module-icon">${i+1}</span><span class="module-body"><b>${t}</b></span></div>`).join('')}</div><div style="text-align:right;margin-top:15px"><button class="button" onclick="closeModal()">Zamknij</button></div>`)}
 document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();setPublicMenu(false)}});
+document.getElementById('mainPublicNav')?.addEventListener('click',e=>{
+  if(e.target.closest('a[href^="#"]'))setPublicMenu(false);
+});
 window.addEventListener('hashchange',syncRouteFromAddress);
 go('home',false);
 syncRouteFromAddress();
