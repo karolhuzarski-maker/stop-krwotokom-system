@@ -111,9 +111,10 @@ html { scroll-padding-top: 0; }
   flex-direction: row;
   align-items: center;
   flex-wrap: nowrap;
-  gap: 27px;
+  gap: 32px;
   width: auto;
   padding: 0;
+  font-family: Arial, "Segoe UI", sans-serif;
 }
 #visitor .sitenav a {
   display: inline-block;
@@ -121,8 +122,12 @@ html { scroll-padding-top: 0; }
   border: 0;
   color: var(--sk-ink);
   font-size: 12px;
-  font-weight: 600;
-  white-space: nowrap;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  max-width: 132px;
+  white-space: normal;
   transition: color .18s;
 }
 #visitor .sitenav a:hover { color: var(--sk-red); }
@@ -133,8 +138,11 @@ html { scroll-padding-top: 0; }
   border-radius: 4px;
   color: var(--sk-ink);
   background: #fff;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: .09em;
+  text-transform: uppercase;
   transition: border-color .18s, color .18s, background .18s;
 }
 #visitor .panel-btn:hover {
@@ -156,10 +164,10 @@ body.guest-mode #visitor .hero-content {
   align-items: center;
   width: 100%;
   max-width: 1240px;
-  min-height: 590px;
+  min-height: 0;
   gap: 62px;
   margin-inline: auto;
-  padding: 64px 32px 68px;
+  padding: 28px 32px 68px;
 }
 body.guest-mode #visitor .hero-text {
   order: 2;
@@ -256,7 +264,7 @@ body.guest-mode #visitor .hero-photo-wrap {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  align-self: center;
+  align-self: flex-start;
   width: 100%;
   height: auto;
   min-height: 0;
@@ -373,16 +381,15 @@ body.guest-mode #visitor .sk-inst-aside { padding: 26px; border-color: var(--sk-
   #visitor .header-inside { gap: 24px; }
   #visitor .brand-link { flex-basis: 214px; width: 214px; }
   #visitor .brand-signature { font-size: 7.3px; }
-  #visitor .sitenav { gap: 18px; }
+  #visitor .sitenav { gap: 20px; }
   #visitor .sitenav a, #visitor .panel-btn { font-size: 11px; }
   #visitor .panel-btn { padding-inline: 13px; }
-  body.guest-mode #visitor .hero-content { gap: 40px; min-height: 545px; padding-block: 50px; }
+  body.guest-mode #visitor .hero-content { gap: 40px; min-height: 0; padding-top: 28px; padding-bottom: 50px; }
   #visitor .split-heading, #visitor .sk-inst-layout, #visitor .sk-inline-section { gap: 45px; }
   #visitor .proof-inner > div { padding-inline: 18px; }
 }
 
-@media (max-width: 900px) {
-  #visitor .sitecontainer { padding-inline: 24px; }
+@media (max-width: 1000px) {
   #visitor .sitebar, #visitor .header-inside { min-height: 96px; }
   #visitor .header-inside { position: relative; display: flex; flex-wrap: wrap; gap: 0; padding-block: 8px; }
   #visitor .brand-link { flex-basis: 200px; width: 200px; }
@@ -392,9 +399,13 @@ body.guest-mode #visitor .sk-inst-aside { padding: 26px; border-color: var(--sk-
   #visitor .mobile-menu-btn[aria-expanded="true"] { color: var(--sk-red); border-color: var(--sk-red); }
   #visitor .sitenav { display: none; flex-direction: column; align-items: stretch; gap: 0; width: 100%; margin-top: 14px; padding: 0 0 12px; border-top: 1px solid var(--sk-line); }
   #visitor .sitenav.open { display: flex; }
-  #visitor .sitenav a { display: block; padding: 15px 0; border-bottom: 1px solid var(--sk-line); font-size: 13px; }
-  #visitor .sitenav .panel-btn { width: 100%; margin-top: 15px; font-size: 12px; }
-  body.guest-mode #visitor .hero-content { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 30px; max-width: 1240px; min-height: 0; padding: 47px 24px 50px; }
+  #visitor .sitenav a { display: block; max-width: none; padding: 15px 0; border-bottom: 1px solid var(--sk-line); font-size: 12px; }
+  #visitor .sitenav .panel-btn { width: 100%; margin-top: 15px; font-size: 11px; }
+}
+
+@media (max-width: 900px) {
+  #visitor .sitecontainer { padding-inline: 24px; }
+  body.guest-mode #visitor .hero-content { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 30px; max-width: 1240px; min-height: 0; padding: 28px 24px 50px; }
   body.guest-mode #visitor .hero-text { order: 2; }
   body.guest-mode #visitor .hero-text h1 { font-size: clamp(36px, 5vw, 46px); }
   body.guest-mode #visitor .hero-text p { font-size: 14px; }
@@ -428,7 +439,7 @@ body.guest-mode #visitor .sk-inst-aside { padding: 26px; border-color: var(--sk-
   #visitor .brand-link { flex-basis: 190px; width: 190px; }
   #visitor .brand-signature { font-size: 6.6px; }
   #visitor .mobile-menu-btn { min-width: 77px; gap: 6px; padding-inline: 10px; }
-  body.guest-mode #visitor .hero-content { display: flex; flex-direction: column; align-items: stretch; gap: 32px; padding: 38px 22px 40px; }
+  body.guest-mode #visitor .hero-content { display: flex; flex-direction: column; align-items: stretch; gap: 32px; padding: 28px 22px 40px; }
   body.guest-mode #visitor .hero-text { order: 1; padding: 0; }
   #visitor .small-label { font-size: 9px; letter-spacing: .13em; }
   body.guest-mode #visitor .hero-text h1 { margin: 20px 0 22px; font-size: clamp(36px, 10vw, 48px); line-height: 1.04; }
