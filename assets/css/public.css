@@ -73,18 +73,18 @@ html { scroll-padding-top: 0; }
 #visitor .brand-mark {
   display: block;
   width: 100%;
-  aspect-ratio: 1605 / 650;
+  aspect-ratio: 1682 / 704;
   overflow: hidden;
 }
 #visitor .brand-logo {
   display: block;
   position: relative;
-  left: -5.29595%;
-  width: 110.5296%;
+  left: -2.73484%;
+  width: 105.46968%;
   max-width: none;
   height: auto;
   max-height: none;
-  margin-top: -2.49221%;
+  margin-top: -4.04281%;
   object-fit: contain;
   filter: none;
 }
@@ -100,17 +100,17 @@ html { scroll-padding-top: 0; }
 .sidebar .portal-brand-mark {
   display: block;
   width: 100%;
-  aspect-ratio: 1605 / 650;
+  aspect-ratio: 1682 / 704;
   overflow: hidden;
 }
 .sidebar .portal-brand-mark .private-logo {
   display: block;
   position: relative;
-  left: -5.29595%;
-  width: 110.5296%;
+  left: -2.73484%;
+  width: 105.46968%;
   max-width: none;
   height: auto;
-  margin: -2.49221% 0 0;
+  margin: -4.04281% 0 0;
   padding: 0;
   border-radius: 0;
   background: transparent;
