@@ -1,4 +1,4 @@
-# STOP KRWOTOKOM - nowa strona i demonstracyjny portal instruktora
+# STOP KRWOTOKOM SYSTEM - nowa strona i demonstracyjny portal instruktora
 
 Wersja startowa (MVP) przygotowana z zatwierdzonej makiety HTML. Nie jest to wdrożony system kont i certyfikacji.
 

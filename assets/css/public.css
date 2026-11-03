@@ -20,7 +20,7 @@ html { scroll-padding-top: 0; }
   padding-inline: 32px;
 }
 
-#visitor section[id] { scroll-margin-top: 110px; }
+#visitor section[id] { scroll-margin-top: 128px; }
 #visitor a { text-decoration: none; }
 #visitor button, #visitor a { -webkit-tap-highlight-color: transparent; }
 #visitor :is(a, button):focus-visible {
@@ -57,24 +57,23 @@ html { scroll-padding-top: 0; }
   justify-content: space-between;
   min-height: 108px;
   gap: 36px;
-  padding-block: 10px;
+  padding-block: 6px;
 }
 #visitor .brand-link {
   display: flex;
-  flex: 0 0 232px;
+  flex: 0 0 208px;
   flex-direction: column;
   align-items: stretch;
   gap: 1px;
-  width: 232px;
+  width: 208px;
   min-width: 0;
   color: var(--sk-red);
 }
-/* Crop only the old English signature; retain the original mark and full strap. */
+/* Display the complete supplied logo, including its signature and Polish flag. */
 #visitor .brand-mark {
   display: block;
   width: 100%;
-  aspect-ratio: 2048 / 716;
-  overflow: hidden;
+  aspect-ratio: 2 / 1;
 }
 #visitor .brand-logo {
   display: block;
@@ -83,28 +82,6 @@ html { scroll-padding-top: 0; }
   max-height: none;
   object-fit: contain;
   filter: none;
-  clip-path: polygon(0 0, 100% 0, 100% 85%, 85.4% 85%, 85.4% 83.2%, 0 83.2%);
-}
-#visitor .brand-signature {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding-inline: 0;
-  font-size: 8px;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: .12em;
-  white-space: nowrap;
-}
-#visitor .polish-flag {
-  display: inline-block;
-  flex: 0 0 20px;
-  width: 20px;
-  height: 12.5px;
-  background: linear-gradient(to bottom, #fff 0 50%, #dc143c 50% 100%);
-  border: 1px solid #dedbd6;
-  border-radius: 1px;
 }
 #visitor .sitenav {
   display: flex;
@@ -131,6 +108,7 @@ html { scroll-padding-top: 0; }
   transition: color .18s;
 }
 #visitor .sitenav a:hover { color: var(--sk-red); }
+#visitor .sitenav a:first-child { max-width: 178px; }
 #visitor .panel-btn {
   min-height: 43px;
   padding: 11px 16px;
@@ -380,8 +358,7 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
 
 @media (max-width: 1080px) {
   #visitor .header-inside { gap: 24px; }
-  #visitor .brand-link { flex-basis: 214px; width: 214px; }
-  #visitor .brand-signature { font-size: 7.3px; }
+  #visitor .brand-link { flex-basis: 200px; width: 200px; }
   #visitor .sitenav { gap: 20px; }
   #visitor .sitenav a, #visitor .panel-btn { font-size: 11px; }
   #visitor .panel-btn { padding-inline: 13px; }
@@ -394,13 +371,12 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
   #visitor .sitebar, #visitor .header-inside { min-height: 96px; }
   #visitor .header-inside { position: relative; display: flex; flex-wrap: wrap; gap: 0; padding-block: 8px; }
   #visitor .brand-link { flex-basis: 200px; width: 200px; }
-  #visitor .brand-signature { font-size: 7px; letter-spacing: .1em; }
-  #visitor .polish-flag { flex-basis: 18px; width: 18px; height: 11.25px; }
   #visitor .mobile-menu-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 84px; min-height: 43px; margin-left: auto; padding: 10px 12px; border: 1px solid #dedbd6; border-radius: 4px; color: var(--sk-ink); background: #fff; font-size: 11px; font-weight: 600; }
   #visitor .mobile-menu-btn[aria-expanded="true"] { color: var(--sk-red); border-color: var(--sk-red); }
   #visitor .sitenav { display: none; flex-direction: column; align-items: stretch; gap: 0; width: 100%; margin-top: 14px; padding: 0 0 12px; border-top: 1px solid var(--sk-line); }
   #visitor .sitenav.open { display: flex; }
   #visitor .sitenav a { display: block; max-width: none; padding: 15px 0; border-bottom: 1px solid var(--sk-line); font-size: 12px; }
+  #visitor .sitenav a:first-child { max-width: none; }
   #visitor .sitenav .panel-btn { width: 100%; margin-top: 15px; font-size: 11px; }
 }
 
@@ -435,10 +411,9 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
 
 @media (max-width: 640px) {
   #visitor .sitecontainer { padding-inline: 22px; }
-  #visitor section[id] { scroll-margin-top: 95px; }
+  #visitor section[id] { scroll-margin-top: 120px; }
   #visitor .sitebar, #visitor .header-inside { min-height: 94px; }
   #visitor .brand-link { flex-basis: 190px; width: 190px; }
-  #visitor .brand-signature { font-size: 6.6px; }
   #visitor .mobile-menu-btn { min-width: 77px; gap: 6px; padding-inline: 10px; }
   body.guest-mode #visitor .hero-content { display: flex; flex-direction: column; align-items: stretch; gap: 32px; padding: 28px 22px 40px; }
   body.guest-mode #visitor .hero-text { order: 1; padding: 0; }
@@ -477,7 +452,6 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
 @media (max-width: 359px) {
   #visitor .sitecontainer { padding-inline: 17px; }
   #visitor .brand-link { flex-basis: 174px; width: 174px; }
-  #visitor .brand-signature { font-size: 6px; }
   #visitor .mobile-menu-btn { min-width: 72px; padding-inline: 8px; }
   body.guest-mode #visitor .hero-content { padding-inline: 17px; }
   body.guest-mode #visitor .hero-text h1 { font-size: 35px; }

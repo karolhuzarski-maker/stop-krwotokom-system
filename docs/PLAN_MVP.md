@@ -1,9 +1,9 @@
-# Plan STOP KRWOTOKOM - bez rozbudowy ponad potrzeby
+# Plan STOP KRWOTOKOM SYSTEM - bez rozbudowy ponad potrzeby
 
 ## Etap 1 - prezentacja online
 - Publikacja istniejącej strony i demonstracyjnego panelu na GitHub Pages.
 - Poprawienie drobnych tekstów i responsywności, bez przebudowy stylistyki.
-- Zachowanie nazewnictwa: Kurs STOP KRWOTOKOM, Kurs instruktorski STOP KRWOTOKOM.
+- Zachowanie nazewnictwa: Kurs STOP KRWOTOKOM SYSTEM, Kurs instruktorski STOP KRWOTOKOM SYSTEM.
 - Kafelek „Centra szkoleniowe” otwiera wykaz licencjonowanych ośrodków w nowej karcie.
 
 ## Etap 2 - uporządkowanie aplikacji
