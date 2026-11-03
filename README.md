@@ -3,7 +3,7 @@
 Wersja startowa (MVP) przygotowana z zatwierdzonej makiety HTML. Nie jest to wdrożony system kont i certyfikacji.
 
 ## Co działa
-- Strona publiczna z hasłem „Polski system kontroli krwotoków”, opisem kursu, instruktora, ośrodków i terminów.
+- Strona publiczna z hasłem „Polski standard kontroli krwotoków”, opisem kursu, instruktora, ośrodków i terminów.
 - Demonstracyjny panel gościa i instruktora; menu: Pulpit dostępny przez logo, Moje szkolenia, Dodaj szkolenie, Materiały, Mój profil i ID.
 - Demonstracyjne formularze i wykaz licencjonowanych ośrodków w nowej karcie.
 - Wszystkie zdjęcia i logo wewnątrz projektu, bez odsyłania do plików lokalnych.

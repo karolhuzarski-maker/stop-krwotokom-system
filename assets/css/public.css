@@ -61,27 +61,59 @@ html { scroll-padding-top: 0; }
 }
 #visitor .brand-link {
   display: flex;
-  flex: 0 0 208px;
+  flex: 0 0 232px;
   flex-direction: column;
   align-items: stretch;
   gap: 1px;
-  width: 208px;
+  width: 232px;
   min-width: 0;
   color: var(--sk-red);
 }
-/* Display the complete supplied logo, including its signature and Polish flag. */
+/* Trim the supplied image's blank canvas while retaining the complete mark. */
 #visitor .brand-mark {
   display: block;
   width: 100%;
-  aspect-ratio: 2 / 1;
+  aspect-ratio: 1605 / 650;
+  overflow: hidden;
 }
 #visitor .brand-logo {
   display: block;
-  width: 100%;
+  position: relative;
+  left: -5.29595%;
+  width: 110.5296%;
+  max-width: none;
   height: auto;
   max-height: none;
+  margin-top: -2.49221%;
   object-fit: contain;
   filter: none;
+}
+.sidebar .portal-logo-frame {
+  display: block;
+  width: 200px;
+  max-width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 3px;
+  background: #fff;
+}
+.sidebar .portal-brand-mark {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1605 / 650;
+  overflow: hidden;
+}
+.sidebar .portal-brand-mark .private-logo {
+  display: block;
+  position: relative;
+  left: -5.29595%;
+  width: 110.5296%;
+  max-width: none;
+  height: auto;
+  margin: -2.49221% 0 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
 }
 #visitor .sitenav {
   display: flex;
@@ -358,7 +390,7 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
 
 @media (max-width: 1080px) {
   #visitor .header-inside { gap: 24px; }
-  #visitor .brand-link { flex-basis: 200px; width: 200px; }
+  #visitor .brand-link { flex-basis: 208px; width: 208px; }
   #visitor .sitenav { gap: 20px; }
   #visitor .sitenav a, #visitor .panel-btn { font-size: 11px; }
   #visitor .panel-btn { padding-inline: 13px; }
@@ -413,7 +445,7 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
   #visitor .sitecontainer { padding-inline: 22px; }
   #visitor section[id] { scroll-margin-top: 120px; }
   #visitor .sitebar, #visitor .header-inside { min-height: 94px; }
-  #visitor .brand-link { flex-basis: 190px; width: 190px; }
+  #visitor .brand-link { flex-basis: 200px; width: 200px; }
   #visitor .mobile-menu-btn { min-width: 77px; gap: 6px; padding-inline: 10px; }
   body.guest-mode #visitor .hero-content { display: flex; flex-direction: column; align-items: stretch; gap: 32px; padding: 28px 22px 40px; }
   body.guest-mode #visitor .hero-text { order: 1; padding: 0; }
