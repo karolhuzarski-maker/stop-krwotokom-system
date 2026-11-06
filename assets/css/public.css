@@ -579,19 +579,19 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
 #visitor .program-card-illustrated .card-bottom span { font: inherit; letter-spacing: inherit; }
 
 /* The original training photos sit beside the licensed-centre description. */
-#visitor .sk-centres-layout {
+#visitor .sk-centres-layout, #visitor .sk-dates-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
   align-items: center;
   gap: 85px;
 }
-#visitor .sk-centres-copy { max-width: 540px; }
-#visitor .sk-centres-copy h2 {
+#visitor .sk-centres-copy, #visitor .sk-dates-copy { max-width: 540px; }
+#visitor .sk-centres-copy h2, #visitor .sk-dates-copy h2 {
   margin: 0 0 25px;
   font-size: clamp(30px, 3.4vw, 43px);
   line-height: 1.12;
 }
-#visitor .sk-centres-copy p {
+#visitor .sk-centres-copy p, #visitor .sk-dates-copy p {
   margin: 0 0 25px;
   color: var(--sk-muted);
   font-size: 14px;
@@ -622,7 +622,7 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
   object-position: center;
 }
 #visitor .sk-centres-shot:first-child img { object-position: center 42%; }
-#visitor .sk-centres-shot figcaption {
+#visitor .sk-centres-shot figcaption, #visitor .sk-dates-photo figcaption {
   position: absolute;
   inset: auto 0 0;
   margin: 0;
@@ -641,16 +641,47 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
 #visitor .sk-centres-pair-photo { min-width: 0; min-height: 0; overflow: hidden; }
 #visitor .sk-centres-room { object-position: center 72% !important; }
 @media (max-width: 1080px) {
-  #visitor .sk-centres-layout { gap: 45px; }
+  #visitor .sk-centres-layout, #visitor .sk-dates-layout { gap: 45px; }
 }
 @media (max-width: 900px) {
-  #visitor .sk-centres-layout { grid-template-columns: 1fr; gap: 32px; }
-  #visitor .sk-centres-copy { max-width: 650px; }
+  #visitor .sk-centres-layout, #visitor .sk-dates-layout { grid-template-columns: 1fr; gap: 32px; }
+  #visitor .sk-centres-copy, #visitor .sk-dates-copy { max-width: 650px; }
   #visitor .sk-centres-collage { max-width: 560px; justify-self: start; }
 }
 @media (max-width: 640px) {
-  #visitor .sk-centres-copy h2 { font-size: 32px; line-height: 1.13; }
+  #visitor .sk-centres-copy h2, #visitor .sk-dates-copy h2 { font-size: 32px; line-height: 1.13; }
   #visitor .sk-centres-collage { gap: 10px; }
   #visitor .sk-centres-shot { aspect-ratio: 1; }
-  #visitor .sk-centres-shot figcaption { padding: 28px 9px 9px; font-size: 10px; }
+  #visitor .sk-centres-shot figcaption, #visitor .sk-dates-photo figcaption { padding: 28px 9px 9px; font-size: 10px; }
+}
+
+/* A closer viewport of the supplied photograph; no retouching of the trainer. */
+#visitor .sk-centres-shot .sk-training-closeup {
+  position: absolute;
+  top: -22%;
+  left: -25.45%;
+  width: 133.93%;
+  max-width: none;
+  height: auto;
+}
+#visitor .sk-dates-photo {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0;
+  justify-self: center;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--sk-paper);
+}
+#visitor .sk-dates-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+#visitor .sk-dates-photo figcaption { font-size: 12px; padding: 35px 18px 16px; }
+@media (max-width: 900px) {
+  #visitor .sk-dates-photo { max-width: 560px; justify-self: start; }
 }
