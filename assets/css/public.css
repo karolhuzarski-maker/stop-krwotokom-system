@@ -526,7 +526,8 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
   width: 53cqi;
   margin: 0;
   color: #080b0d;
-  font-size: max(20px, 7.1cqi);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: max(18px, 6.7cqi);
   font-weight: 800;
   line-height: 1.12;
   letter-spacing: -.045em;
