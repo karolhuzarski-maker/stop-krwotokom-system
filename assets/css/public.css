@@ -577,3 +577,80 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
 }
 
 #visitor .program-card-illustrated .card-bottom span { font: inherit; letter-spacing: inherit; }
+
+/* The original training photos sit beside the licensed-centre description. */
+#visitor .sk-centres-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 85px;
+}
+#visitor .sk-centres-copy { max-width: 540px; }
+#visitor .sk-centres-copy h2 {
+  margin: 0 0 25px;
+  font-size: clamp(30px, 3.4vw, 43px);
+  line-height: 1.12;
+}
+#visitor .sk-centres-copy p {
+  margin: 0 0 25px;
+  color: var(--sk-muted);
+  font-size: 14px;
+  line-height: 1.85;
+}
+#visitor .sk-centres-collage {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+  max-width: 480px;
+  justify-self: center;
+}
+#visitor .sk-centres-shot {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  aspect-ratio: 1.12;
+  border-radius: 6px;
+  background: var(--sk-paper);
+}
+#visitor .sk-centres-shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+#visitor .sk-centres-shot:first-child img { object-position: center 42%; }
+#visitor .sk-centres-shot figcaption {
+  position: absolute;
+  inset: auto 0 0;
+  margin: 0;
+  padding: 30px 12px 11px;
+  color: #fff;
+  background: linear-gradient(transparent, #161c22dc);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+#visitor .sk-centres-shot-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3px;
+}
+#visitor .sk-centres-pair-photo { min-width: 0; min-height: 0; overflow: hidden; }
+#visitor .sk-centres-room { object-position: center 72% !important; }
+@media (max-width: 1080px) {
+  #visitor .sk-centres-layout { gap: 45px; }
+}
+@media (max-width: 900px) {
+  #visitor .sk-centres-layout { grid-template-columns: 1fr; gap: 32px; }
+  #visitor .sk-centres-copy { max-width: 650px; }
+  #visitor .sk-centres-collage { max-width: 560px; justify-self: start; }
+}
+@media (max-width: 640px) {
+  #visitor .sk-centres-copy h2 { font-size: 32px; line-height: 1.13; }
+  #visitor .sk-centres-collage { gap: 10px; }
+  #visitor .sk-centres-shot { aspect-ratio: 1; }
+  #visitor .sk-centres-shot figcaption { padding: 28px 9px 9px; font-size: 10px; }
+}
