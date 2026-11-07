@@ -22,7 +22,7 @@
 ## Weryfikacja równoległości
 
 Test tests/concurrency.integration.mjs uruchamia dwa niezależne połączenia PostgreSQL, wymusza oczekiwanie drugiej transakcji na licznik i sprawdza różne numery, ponowne nadanie tej samej osobie oraz rollback numeru przy nieudanym zapisie autoryzacji.
-Lokalnie nie było serwera PostgreSQL: ten test został jawnie pominięty. Workflow GitHub Actions uruchamia go na jednorazowym PostgreSQL 16. Aktualny wynik workflow sprawdź w PR; nie utożsamiaj testów PGlite z testem dwóch połączeń.
+Lokalnie nie było serwera PostgreSQL: ten test został jawnie pominięty. Następnie został rzeczywiście wykonany na PostgreSQL 16 w GitHub Actions i zakończył się powodzeniem, podobnie jak wszystkie 16 testów lokalnych. Zweryfikowano osobne połączenia, oczekiwanie na blokadę licznika, różne numery, ponowienie dla tej samej osoby i atomowy rollback. Wynik: https://github.com/karolhuzarski-maker/stop-krwotokom-system/actions/runs/42416178833 (success). Testy PGlite nie są traktowane jako zastępstwo testu dwóch połączeń.
 
 ## Wymaga konfiguracji i prób odbiorczych
 
