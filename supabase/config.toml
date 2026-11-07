@@ -1,0 +1,5 @@
+project_id = "stop-krwotokom-system"
+
+[functions.dispatch-notifications]
+# This service endpoint validates a separate secret itself. It accepts no browser calls.
+verify_jwt = false

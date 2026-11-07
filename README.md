@@ -1,34 +1,41 @@
-# STOP KRWOTOKOM SYSTEM - nowa strona i demonstracyjny portal instruktora
+# STOP KRWOTOKOM SYSTEM
 
-Wersja startowa (MVP) przygotowana z zatwierdzonej makiety HTML. Nie jest to wdrożony system kont i certyfikacji.
+Istniejąca strona publiczna i portal instruktora na GitHub Pages. Właściciel: H-CORE EDU. Interfejs po polsku.
 
-## Co działa
-- Strona publiczna z hasłem „Polski standard kontroli krwotoków”, opisem kursu, instruktora, ośrodków i terminów.
-- Demonstracyjny panel gościa i instruktora; menu: Pulpit dostępny przez logo, Moje szkolenia, Dodaj szkolenie, Materiały, Mój profil i ID.
-- Demonstracyjne formularze i wykaz licencjonowanych ośrodków w nowej karcie.
-- Wszystkie zdjęcia i logo wewnątrz projektu, bez odsyłania do plików lokalnych.
+## Konta i centralny rejestr
 
-## Czego jeszcze NIE ma
-- Serwerowego logowania, rzeczywistych uprawnień ani bazy danych.
-- Trwałego zapisywania kursów i uczestników, prawdziwego generatora certyfikatów i QR.
-- Produkcyjnej weryfikacji autoryzacji. Wszystkie przykłady są wyłącznie demonstracyjne.
+Implementacja Supabase Auth (potwierdzanie e-mail, logowanie hasłem, reset i odtwarzanie sesji), zatwierdzania kont, administracji oraz trzyletnich autoryzacji.
+Role superadministratora są niezależne od autoryzacji instruktorskiej. Numery SK-I-ROK-NNNN nadaje transakcyjnie PostgreSQL, z osobnym licznikiem rocznym i trwałym rejestrem wykorzystanych numerów.
+RLS izoluje dane, sprawdzające uprawnienia funkcje SQL zapisują decyzje i audyt, a kolejka e-mail rejestruje próby i ponawia błędy.
 
-## GitHub Pages - start
-1. Utwórz nowe repozytorium `stop-krwotokom-system` na https://github.com/new (właściciel: karolhuzarski-maker, Public).
-2. Rozpakuj ZIP i wyślij **zawartość folderu** `STOP_KRWOTOKOM_GITHUB_START` do katalogu głównego repozytorium (Add file -> Upload files -> Commit changes). Ważne: `index.html` musi leżeć w katalogu głównym.
-3. Repozytorium -> Settings -> Pages -> Source: Deploy from a branch -> Branch: main -> Folder: /(root) -> Save.
-4. Odwiedź adres `https://karolhuzarski-maker.github.io/stop-krwotokom-system/` po opublikowaniu. Ten adres zacznie działać dopiero po utworzeniu repozytorium i włączeniu Pages.
+**Kod wymaga konfiguracji Supabase i poczty przed uruchomieniem.** Puste wartości konfiguracji blokują formularze; nie ma zastępczego logowania demo.
 
-## Organizacja plików
-- `index.html` - widoki strony i portalu w obecnej wersji demonstracyjnej.
-- `assets/css/style.css` - wszystkie style, zachowana kolejność reguł z pierwotnej makiety.
-- `assets/js/app.js` - przełączanie widoków, przyciski i interakcje DEMO.
-- `assets/images/` - logo, zdjęcia z zajęć, grafiki.
-- `docs/PLAN_MVP.md` - plan rozbudowy w etapach.
+- [Instrukcja uruchomienia, konto właściciela i pierwszy numer](docs/URUCHOMIENIE_SUPABASE.md)
+- [Zakres i wyniki testów](docs/TESTY.md)
+- [Plan rozwoju](docs/PLAN_MVP.md)
 
-## Domena
-Na razie testuj na domenie `github.io`; nie zmieniaj DNS istniejącej strony `stopkrwotokom.org`.
-Docelowy `panel.stopkrwotokom.org` będzie wymagał osobnej konfiguracji domeny i prawdziwych usług uwierzytelniania.
+## Struktura
 
-## Ważne
-GitHub Pages jest hostingiem statycznym. Wszystko, co udostępnisz na opublikowanej stronie (także pliki JS i PDF), będzie publicznie dostępne. Materiały tylko dla instruktorów i dane kursantów NIE mogą trafić do publicznego katalogu Pages.
+- index.html, assets/css/style.css, assets/css/public.css — dotychczasowy wygląd i strona publiczna.
+- assets/js/app.js — dotychczasowe elementy nawigacji i strony publicznej.
+- assets/js/portal.js, admin.js — konta, własny profil, administracja.
+- assets/js/config.js — wyłącznie publiczny adres Supabase, klucz publishable/anon i adres polityki prywatności.
+- assets/js/vendor/supabase.js — lokalna, przypięta wersja oficjalnego SDK 2.119.0, bez zależności od CDN.
+- assets/css/account.css — dodatki dotyczące formularzy i tabel administracyjnych.
+- supabase/migrations/ — pełna migracja SQL i polityki dostępu.
+- supabase/functions/dispatch-notifications/ — serwerowa wysyłka przez Resend.
+- tests/ — testy PostgreSQL WASM, interfejsu i osobnych połączeń PostgreSQL.
+
+## Sprawdzenie lokalne
+
+Node.js 24 i pnpm 11.25.0: pnpm install --frozen-lockfile --ignore-scripts, następnie pnpm test.
+Test osobnych połączeń: pnpm test:concurrency, wyłącznie z TEST_DATABASE_URL wskazującym nową jednorazową bazę testową.
+Podgląd statyczny: python -m http.server 8765, otwórz http://localhost:8765/.
+
+## Zakres MVP
+
+Konta i autoryzacje są przygotowane do podłączenia usług. Moduły szkoleń, uczestników, certyfikatów, biblioteki i publicznej weryfikacji rejestru nie są uruchomione. Nie prezentują fikcyjnych danych jako prawdziwych.
+Brak płatności, opłat za odnowienie, generatora PDF lub QR. Nie zmieniaj DNS stopkrwotokom.org.
+Pliki Pages są publiczne: dane osobowe, prywatne materiały i sekrety muszą pozostawać w zabezpieczonym zapleczu.
+
+Zmiany wdrażaj przez osobną gałąź i PR; produkcyjnej main nie zastępuj bez sprawdzenia konfiguracji i pełnej ścieżki e-mail.

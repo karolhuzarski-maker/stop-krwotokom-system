@@ -1,0 +1,8 @@
+/* Additions scoped to new account and administration views. Existing design stays intact. */
+.admin-scroll{overflow-x:auto;max-width:100%}
+.admin-actions{display:flex;flex-wrap:wrap;gap:6px;min-width:220px}
+.admin-scroll pre{white-space:pre-wrap;overflow-wrap:anywhere;max-width:440px}
+.admin-scroll td{overflow-wrap:anywhere}
+#auth-message:empty,#admin-message:empty{display:none}
+button:disabled{opacity:.5;cursor:not-allowed}
+@media(max-width:600px){.admin-actions{min-width:170px}.modal .form{grid-template-columns:1fr}}
