@@ -120,6 +120,7 @@ begin
  if v_before is null then raise exception 'Brak autoryzacji'; end if;
  if exists(select 1 from public.instructor_numbers where number=p_number) then raise exception 'Numer był już użyty'; end if;
  v_year:=split_part(p_number,'-',3)::integer;v_serial:=split_part(p_number,'-',4)::integer;
+ if p_number <> 'SK-I-'||v_year||'-'||lpad(v_serial::text,greatest(4,length(v_serial::text)),'0') then raise exception 'Niekanoniczny zapis numeru'; end if;
  if v_serial<1 or v_year<>extract(year from (v_before->>'first_assigned_at')::timestamptz at time zone 'Europe/Warsaw') then raise exception 'Korekta musi zachować rok pierwszego nadania'; end if;
  insert into public.instructor_number_counters values(v_year,v_serial) on conflict(year) do update set last_value=greatest(public.instructor_number_counters.last_value,excluded.last_value);
  update public.instructor_numbers set retired_at=now() where user_id=p_user and retired_at is null;

@@ -73,6 +73,7 @@ test('migracja, RLS, decyzje, numeracja i kolejka na PostgreSQL WASM',async t=>{
  });
  await t.test('korekta z audytem, rezerwacja starego numeru i brak ponownego użycia',async()=>{
   await as(owner);const newNumber=number.replace(/0002$/,'0010');
+  await assert.rejects(db.query("select public.admin_correct_number($1,$2,'Niepoprawne dodatkowe zero w numerze')",[a,number.replace(/0002$/,'00001')]),/Niekanoniczny/);
   await db.query("select public.admin_correct_number($1,$2,'Udokumentowana wyjątkowa korekta')",[a,newNumber]);
   await assert.rejects(db.query("select public.admin_correct_number($1,$2,'Próba ponownego użycia starego numeru')",[a,number]),/już użyty/);
   assert.equal(await value("select count(*)::int from public.admin_audit_log where action='number.correction'"),1);
