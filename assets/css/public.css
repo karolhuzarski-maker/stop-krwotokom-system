@@ -88,6 +88,15 @@ html { scroll-padding-top: 0; }
   object-fit: contain;
   filter: none;
 }
+/* Match the public red band with the same dotted world-map artwork. */
+.sidebar {
+  background-color: #963032;
+  background-image: url("../images/mapa-pas.svg");
+  background-repeat: repeat-y;
+  background-position: center 148px;
+  background-size: 760px 250px;
+}
+
 .sidebar .portal-logo-frame {
   display: block;
   width: 200px;
