@@ -11,8 +11,8 @@
 - Uporządkowanie komponentów i usunięcie demonstracyjnych danych przed produkcją.
 
 ## Etap 3 - dostęp instruktorów
-- Supabase Auth: potwierdzenie adresu i logowanie kodem e-mail.
-- Role: gość, kandydat, instruktor, koordynator ośrodka, administrator.
+- Supabase Auth: potwierdzenie adresu, logowanie hasłem i bezpieczny reset.
+- MVP: status konta, niezależna rola superadmin i niezależna autoryzacja instruktora; role ośrodków w przyszłości.
 - Zatwierdzanie autoryzacji przez administratora; bezpieczna autoryzacja na serwerze i polityki RLS.
 - Jedno konto i stałe ID instruktora; osobno: certyfikacja i autoryzacja.
 
@@ -28,3 +28,6 @@
 - Bez improwizowanych opasek uciskowych.
 - Kursanci: ewaluacja bieżąca; instruktorzy: egzamin teoretyczny, praktyczny i dydaktyczny.
 - Licencjonowany ośrodek: minimum 2 instruktorów, w tym 1 ratownik medyczny i 1 ratownik KPP; koordynator: ratownik medyczny, autoryzowany instruktor.
+
+## Implementacja kont i autoryzacji (listopad 2026)
+Kod etapu 3 przygotowany na osobnej gałęzi. Uruchomienie wymaga Supabase, SMTP, Resend, konfiguracji kolejki i prób odbiorczych opisanych w URUCHOMIENIE_SUPABASE.md. Moduły etapu 4 pozostają wyłączone.
