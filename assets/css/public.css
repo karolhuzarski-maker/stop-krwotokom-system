@@ -378,9 +378,9 @@ body.guest-mode #visitor .instructor-zone { padding-block: 88px; background: var
   top: 38%;
   left: max(6px, calc(50% - 650px));
   width: min(740px, 61vw);
-  aspect-ratio: 10 / 7;
-  background: url("../images/instruktor-portal-watermark.svg") center / contain no-repeat;
-  opacity: .13;
+  aspect-ratio: 25 / 19;
+  background: url("../images/instruktor-portal-watermark.svg?v=20261110-chmurki") center / contain no-repeat;
+  opacity: .19;
   pointer-events: none;
   user-select: none;
 }
@@ -455,7 +455,7 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
   #visitor .sk-inst-layout > div:first-child { max-width: 650px; }
   #visitor .sk-inst-layout p { max-width: none; }
   body.guest-mode #visitor .instructor-zone { padding-block: 65px; }
-  #visitor .sk-inst-watermark { top: 20px; left: auto; right: -80px; width: min(690px, 110vw); opacity: .065; }
+  #visitor .sk-inst-watermark { top: 20px; left: auto; right: 16px; width: min(690px, calc(100% - 32px)); opacity: .085; }
   #visitor .sk-inst-aside { max-width: 650px; }
   #visitor .sk-inline-section p { max-width: 650px; }
   #visitor .sk-photo-proof { gap: 14px !important; }

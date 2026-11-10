@@ -1,44 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="700" viewBox="0 0 1000 700" fill="none" stroke="#963032" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-  <title>Materiały, szkolenia i portal instruktora</title>
-  <!-- Original decorative artwork. No text or third-party marks. -->
-  <g stroke-width="2.5">
-    <path d="M245 165C324 169 318 229 358 256M503 132V226M758 185L660 265M815 411L714 384M596 567L559 507M228 510L349 445"/>
-    <path d="M240 135C380 9 641 14 769 120M850 229C930 348 885 538 700 609M472 627C315 650 174 615 126 466M118 324C105 268 119 228 142 199" stroke-dasharray="3 13"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="760" viewBox="0 0 1000 760" fill="none" stroke="#963032" stroke-linecap="round" stroke-linejoin="round">
+  <title>Portal, certyfikaty, ośrodki, materiały, aktualne wytyczne i polski standard kontroli krwotoków</title>
+  <!-- Original folio-tablet composition with free-floating, labelled clouds. -->
+  <g stroke-width="2.5" stroke-opacity=".58" stroke-dasharray="3 12">
+    <path d="M263 230C301 239 300 308 350 330M441 142C434 199 474 230 488 284M801 179C741 202 718 254 673 307M764 356C725 373 716 395 678 408M262 633C310 651 336 608 380 584M724 629C678 650 656 625 618 596"/>
   </g>
-  <!-- A tablet with a course dashboard, not a reproduction of the reference. -->
-  <rect x="290" y="220" width="430" height="293" rx="28" stroke-width="6"/>
-  <rect x="312" y="243" width="386" height="235" rx="10" stroke-width="3"/>
-  <path d="M484 495H526M312 297H698M451 297V478" stroke-width="3"/>
-  <circle cx="344" cy="271" r="9"/>
-  <path d="M366 265H420M366 276H402M335 324H425M335 346H402M335 368H415M335 390H391"/>
-  <g stroke-width="3">
-    <rect x="472" y="321" width="91" height="62" rx="7"/>
-    <path d="M511 339L530 352L511 365Z"/>
-    <rect x="583" y="321" width="91" height="62" rx="7"/>
-    <path d="M604 344L613 353L634 332M604 369H653"/>
-    <path d="M474 406H674M474 427H625M474 448H652"/>
+  <!-- A tablet in an open folio cover, shown obliquely. -->
+  <g transform="translate(327 275) rotate(8 175 133)" stroke-opacity=".73">
+    <path d="M8 0L-81 49Q-94 56-94 72V255Q-94 268-78 270L0 265" stroke-width="4"/>
+    <path d="M-74 70V244M-60 257L-15 251" stroke-width="2.5"/>
+    <path d="M0 265H355L429 330H62L-78 270M62 330L0 265" stroke-width="4"/>
+    <path d="M43 281H349M56 293H363M69 305H378M109 281L128 305M156 281L175 305M203 281L222 305M250 281L269 305M297 281L316 305M180 316H265" stroke-width="2"/>
+    <rect width="355" height="265" rx="22" stroke-width="5"/>
+    <rect x="18" y="19" width="319" height="219" rx="9" stroke-width="3"/>
+    <path d="M162 251H194M18 63H337" stroke-width="3"/>
+    <circle cx="40" cy="42" r="7" stroke-width="2.5"/>
+    <path d="M58 37H138M58 47H113" stroke-width="2.5"/>
+    <path d="M44 91C65 84 84 88 103 99C120 88 141 84 161 91V162C139 154 120 159 103 170C84 159 66 154 44 162ZM103 100V169M58 109L86 117M58 130L86 138M121 116L147 108M121 138L147 130" stroke-width="3"/>
+    <path d="M188 92H309M188 112H281M188 141H309M188 161H266M44 197H310M44 215H230" stroke-width="3"/>
+    <path d="M284 203L293 212L310 191" stroke-width="3.5"/>
   </g>
-  <!-- Teaching resources. -->
-  <circle cx="186" cy="135" r="59" stroke-width="3"/>
-  <path d="M150 110C166 105 178 109 186 116C195 109 208 105 223 110V157C207 152 195 155 186 162C176 155 163 152 150 157ZM186 117V161M160 123L174 126M160 136L174 139M199 125L214 122M199 139L214 135" stroke-width="3"/>
-  <!-- Instructor community. -->
-  <circle cx="503" cy="75" r="57" stroke-width="3"/>
-  <circle cx="503" cy="61" r="13"/>
-  <path d="M479 101V94C479 82 488 77 503 77S527 82 527 94V101M472 54C457 54 456 76 471 76M458 99V93C458 85 462 82 470 81M534 54C549 54 550 76 535 76M548 99V93C548 85 544 82 536 81" stroke-width="3"/>
-  <!-- Certificate. -->
-  <circle cx="809" cy="149" r="64" stroke-width="3"/>
-  <path d="M780 173V110H838V154M791 124H826M791 137H819M791 150H806M818 175L815 191L827 184L836 194L839 175" stroke-width="3"/>
-  <circle cx="828" cy="164" r="15" stroke-width="3"/>
-  <!-- A personal instructor ID. -->
-  <circle cx="874" cy="419" r="60" stroke-width="3"/>
-  <rect x="837" y="393" width="74" height="52" rx="6" stroke-width="3"/>
-  <circle cx="857" cy="410" r="8" stroke-width="3"/>
-  <path d="M846 431C846 418 869 418 869 431M880 408H900M880 420H900M880 432H891" stroke-width="3"/>
-  <!-- A library folder. -->
-  <circle cx="615" cy="624" r="60" stroke-width="3"/>
-  <path d="M580 645V601H606L615 610H651V645ZM588 609V592H617L626 601H643V609" stroke-width="3"/>
-  <!-- Skills and observation sheet. -->
-  <circle cx="171" cy="544" r="63" stroke-width="3"/>
-  <path d="M149 511H142V579H198V511H190M158 507V516H182V507ZM153 536L158 541L166 530M176 536H188M153 558L158 563L166 552M176 558H188" stroke-width="3"/>
-  <g fill="#963032" stroke="none"><circle cx="269" cy="307" r="5"/><circle cx="739" cy="531" r="5"/><circle cx="388" cy="589" r="5"/><circle cx="676" cy="109" r="4"/><circle cx="144" cy="367" r="4"/></g>
+  <!-- Cloud silhouettes have distinct, asymmetric contours. -->
+  <g fill="#f7f6f3" fill-opacity=".85" stroke-width="2.8" stroke-opacity=".7">
+    <path d="M65 248C35 248 22 225 35 206C17 180 36 153 66 156C71 125 111 116 132 141C156 116 200 132 199 161C230 151 256 174 248 197C278 218 263 251 232 251Z"/>
+    <path d="M364 134C335 134 322 111 338 91C325 65 348 40 375 49C389 15 430 19 441 43C467 22 503 43 497 68C530 63 550 90 532 112C539 133 520 145 496 142Z"/>
+    <path d="M678 172C645 173 632 147 650 124C631 97 652 70 682 74C686 43 728 27 752 53C778 24 819 34 830 59C860 36 900 54 899 83C930 73 962 99 951 126C981 151 960 184 927 181Z"/>
+    <path d="M789 370C757 369 747 344 763 324C746 297 769 273 799 280C806 250 846 243 864 267C891 246 927 266 925 291C953 284 980 310 967 331C985 358 963 382 933 377Z"/>
+    <path d="M66 662C34 661 20 637 37 613C22 587 45 562 75 570C84 540 124 537 143 562C171 544 205 561 203 588C234 578 264 602 253 627C271 649 249 673 220 668Z"/>
+    <path d="M748 674C714 673 704 646 725 624C708 598 729 572 760 578C768 546 810 541 831 568C858 544 896 562 895 589C927 577 959 600 950 626C980 651 962 682 930 680Z"/>
+  </g>
+  <g stroke="none" fill="#963032" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="600" font-size="32" text-anchor="middle">
+    <text x="146" y="211">Materiały</text>
+    <text x="437" y="104">Portal</text>
+    <text x="806" y="115" font-size="28"><tspan x="806">Polski standard</tspan><tspan x="806" dy="35">kontroli krwotoków</tspan></text>
+    <text x="866" y="338">Certyfikaty</text>
+    <text x="143" y="628">Ośrodki</text>
+    <text x="836" y="620" font-size="30"><tspan x="836">Aktualne</tspan><tspan x="836" dy="37">wytyczne</tspan></text>
+  </g>
 </svg>
