@@ -1,34 +1,56 @@
-# STOP KRWOTOKOM SYSTEM - nowa strona i demonstracyjny portal instruktora
+# STOP KRWOTOKOM SYSTEM
 
-Wersja startowa (MVP) przygotowana z zatwierdzonej makiety HTML. Nie jest to wdrożony system kont i certyfikacji.
+Strona publiczna i rozwijany portal instruktora H-CORE EDU.
 
-## Co działa
-- Strona publiczna z hasłem „Polski standard kontroli krwotoków”, opisem kursu, instruktora, ośrodków i terminów.
-- Demonstracyjny panel gościa i instruktora; menu: Pulpit dostępny przez logo, Moje szkolenia, Dodaj szkolenie, Materiały, Mój profil i ID.
-- Demonstracyjne formularze i wykaz licencjonowanych ośrodków w nowej karcie.
-- Wszystkie zdjęcia i logo wewnątrz projektu, bez odsyłania do plików lokalnych.
+- Strona: https://karolhuzarski-maker.github.io/stop-krwotokom-system/
+- Kod: https://github.com/karolhuzarski-maker/stop-krwotokom-system
+- Hosting: GitHub Pages, gałąź `main`, katalog główny. Repozytorium i publikacja już istnieją.
 
-## Czego jeszcze NIE ma
-- Serwerowego logowania, rzeczywistych uprawnień ani bazy danych.
-- Trwałego zapisywania kursów i uczestników, prawdziwego generatora certyfikatów i QR.
-- Produkcyjnej weryfikacji autoryzacji. Wszystkie przykłady są wyłącznie demonstracyjne.
+## Obecny stan
 
-## GitHub Pages - start
-1. Utwórz nowe repozytorium `stop-krwotokom-system` na https://github.com/new (właściciel: karolhuzarski-maker, Public).
-2. Rozpakuj ZIP i wyślij **zawartość folderu** `STOP_KRWOTOKOM_GITHUB_START` do katalogu głównego repozytorium (Add file -> Upload files -> Commit changes). Ważne: `index.html` musi leżeć w katalogu głównym.
-3. Repozytorium -> Settings -> Pages -> Source: Deploy from a branch -> Branch: main -> Folder: /(root) -> Save.
-4. Odwiedź adres `https://karolhuzarski-maker.github.io/stop-krwotokom-system/` po opublikowaniu. Ten adres zacznie działać dopiero po utworzeniu repozytorium i włączeniu Pages.
+Strona publiczna działa. Kursy, uczestnicy, dokumenty i publiczna weryfikacja certyfikatów pozostają DEMO z fikcyjnymi danymi, które znikają po odświeżeniu.
 
-## Organizacja plików
-- `index.html` - widoki strony i portalu w obecnej wersji demonstracyjnej.
-- `assets/css/style.css` - wszystkie style, zachowana kolejność reguł z pierwotnej makiety.
-- `assets/js/app.js` - przełączanie widoków, przyciski i interakcje DEMO.
-- `assets/images/` - logo, zdjęcia z zajęć, grafiki.
-- `docs/PLAN_MVP.md` - plan rozbudowy w etapach.
+Przygotowano integrację kont na zaproszenie z Supabase Auth: logowanie, ustawienie i odzyskanie hasła, własny profil, ID i serwerowe sprawdzenie ważności uprawnień. Integracja jest **wyłączona do podłączenia projektu Supabase**. Pusta konfiguracja nie uruchamia formularza haseł ani zewnętrznego SDK. Nie ma publicznej rejestracji.
 
-## Domena
-Na razie testuj na domenie `github.io`; nie zmieniaj DNS istniejącej strony `stopkrwotokom.org`.
-Docelowy `panel.stopkrwotokom.org` będzie wymagał osobnej konfiguracji domeny i prawdziwych usług uwierzytelniania.
+Administrator zaprasza instruktorów i ustawia uprawnienia w panelu Supabase. Nie edytuje kodu dla każdego użytkownika. Po podłączeniu kont operacje DEMO nie udają funkcji prawdziwego konta.
 
-## Ważne
-GitHub Pages jest hostingiem statycznym. Wszystko, co udostępnisz na opublikowanej stronie (także pliki JS i PDF), będzie publicznie dostępne. Materiały tylko dla instruktorów i dane kursantów NIE mogą trafić do publicznego katalogu Pages.
+## Mapa kodu
+
+| Plik | Zawartość |
+|---|---|
+| `index.html` | Strona publiczna, tematy i pytania, SEO, szkielet panelu |
+| `konto.html` | Logowanie i ustawienie hasła z zaproszenia |
+| `assets/js/app.js` | Nawigacja, interakcje DEMO, widok podłączonego profilu |
+| `assets/js/portal-config.js` | Publiczny URL projektu, publishable key, sitekey Turnstile |
+| `assets/js/portal-auth.js` | Adapter Auth, własny profil, sprawdzenie uprawnień |
+| `assets/js/account.js` | Formularze konta |
+| `backend/001_invite_only_access.sql` | Profile, RLS i prywatny magazyn; do wykonania w nowym projekcie |
+| `assets/css/public.css` | Aktualne style strony publicznej i dodatki panelu |
+| `assets/css/style.css` | Bazowe style portalu i pierwotnej makiety |
+| `assets/css/account.css` | Strona konta |
+| `assets/images/`, `assets/icons/`, `favicon.ico` | Grafiki i favicon |
+| `robots.txt`, `sitemap.xml` | Indeksowanie publicznej strony |
+
+## Podłączenie i dalsze prace
+
+- [Instrukcja podłączenia i zapraszania instruktorów](docs/PODLACZENIE_PORTALU.md)
+- [Mini audyt z 10.11.2026](docs/MINI_AUDYT_2026-11-10.md)
+- [Plan kolejnych etapów](docs/PLAN_MVP.md)
+
+Nie zmieniaj DNS istniejącej domeny przed przygotowaniem docelowej publikacji. Canonical i mapa strony wskazują aktualny adres GitHub Pages.
+
+## Kontrole lokalne
+
+Wystarczy Node.js z obsługą `node:test`; nie ma zależności npm ani etapu budowania.
+
+```sh
+npm test
+npm run check
+git diff --check
+```
+
+Testy imitują odpowiedzi Auth. Nie zastępują testu rzeczywistego projektu Supabase, SQL/RLS, wysyłki zaproszeń ani Turnstile.
+
+## Dane i materiały
+
+Repozytorium i GitHub Pages są publiczne. Dane uczestników i materiały tylko dla instruktorów muszą pozostać w bazie/prywatnym magazynie. Na stronie umieszczamy wyłącznie klucz **publishable**; klucze secret/service_role i hasło SMTP zostają w usługach serwerowych.

@@ -1,0 +1,20 @@
+.account-page { margin: 0; min-height: 100vh; padding: 40px 20px; display: grid; place-items: center; color: #25282b; background: #f7f6f3; font-family: Inter, "Segoe UI", Arial, sans-serif; }
+.account-card { width: 100%; max-width: 500px; padding: 30px; border: 1px solid #e6e4df; border-radius: 10px; background: #fff; }
+.account-logo { display: block; width: 270px; max-width: 85%; height: auto; margin: 0 auto 20px; }
+.account-kicker { margin-bottom: 12px; color: #963032; font-size: 10px; font-weight: 700; letter-spacing: .15em; }
+.account-card h1 { font-size: 30px; line-height: 1.15; margin: 0 0 16px; }
+.account-card p { font-size: 14px; line-height: 1.7; }
+.account-message { padding: 14px; margin: 20px 0; background: #f7f6f3; border-left: 3px solid #963032; }
+.account-card label { display: block; font-size: 13px; margin: 18px 0 7px; font-weight: 600; }
+.account-card input { display: block; width: 100%; padding: 12px; border: 1px solid #d6d5d0; border-radius: 5px; font: inherit; }
+.account-card .button { display: inline-block; padding: 12px 17px; margin-top: 18px; background: #963032; border-color: #963032; border-radius: 5px; text-decoration: none; font-size: 13px; }
+.account-card .button:disabled { opacity: .5; cursor: wait; }
+.account-text-button { padding: 10px 0; margin: 10px 14px 0 0; border: 0; background: transparent; color: #782529; font-size: 13px; text-decoration: underline; cursor: pointer; }
+.account-help { margin-top: 26px; padding-top: 22px; border-top: 1px solid #e6e4df; font-size: 14px; }
+.account-help p { margin-top: 7px; }
+.account-help a, .account-back { color: #963032; overflow-wrap: anywhere; }
+.account-back { display: inline-block; margin-top: 20px; font-size: 12px; }
+.account-card [hidden] { display: none !important; }
+.account-card :is(input, button, a):focus-visible { outline: 2px solid #963032; outline-offset: 3px; }
+#account-captcha { margin-top: 16px; }
+@media(max-width: 480px) { .account-page { padding: 20px 14px; } .account-card { padding: 23px 20px; } .account-card h1 { font-size: 27px; } }

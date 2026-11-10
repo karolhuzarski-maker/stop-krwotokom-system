@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://karolhuzarski-maker.github.io/stop-krwotokom-system/sitemap.xml

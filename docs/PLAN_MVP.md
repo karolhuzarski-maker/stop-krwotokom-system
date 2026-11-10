@@ -11,9 +11,11 @@
 - Uporządkowanie komponentów i usunięcie demonstracyjnych danych przed produkcją.
 
 ## Etap 3 - dostęp instruktorów
-- Supabase Auth: potwierdzenie adresu i logowanie kodem e-mail.
-- Role: gość, kandydat, instruktor, koordynator ośrodka, administrator.
-- Zatwierdzanie autoryzacji przez administratora; bezpieczna autoryzacja na serwerze i polityki RLS.
+- Przygotowano Supabase Auth: konta na zaproszenie administratora, potwierdzenie e-maila, własne hasło i odzyskiwanie hasła.
+- Bez samodzielnej rejestracji i formularza zgłoszeń. Administrator zaprasza po e-mailu przez Supabase Dashboard i ustawia ważność dostępu.
+- Przygotowano własny profil, ID, sprawdzenie dostępu na serwerze i RLS. Do wykonania migracja i konfiguracja według `PODLACZENIE_PORTALU.md`.
+- Przygotowano obsługę Turnstile; konieczna konfiguracja w Auth i limity po stronie usługi.
+- Role koordynatora i własny panel administratora można dodać po uruchomieniu podstawowego dostępu.
 - Jedno konto i stałe ID instruktora; osobno: certyfikacja i autoryzacja.
 
 ## Etap 4 - kursy i certyfikaty

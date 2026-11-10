@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="robots" content="noindex,nofollow"/>
+<meta name="referrer" content="no-referrer"/>
+<title>Logowanie instruktora | STOP KRWOTOKOM SYSTEM</title>
+<link rel="icon" href="favicon.ico?v=20261106-tq"/>
+<link rel="stylesheet" href="assets/css/style.css?v=20261103-brand-system"/>
+<link rel="stylesheet" href="assets/css/account.css?v=20261110-dostep"/>
+<script defer src="assets/js/portal-config.js?v=20261110-dostep"></script>
+<script defer src="assets/js/portal-auth.js?v=20261110-dostep"></script>
+<script defer src="assets/js/account.js?v=20261110-dostep"></script>
+</head>
+<body class="account-page">
+<main class="account-card">
+<a href="./" aria-label="STOP KRWOTOKOM SYSTEM — strona główna"><img class="account-logo" src="assets/images/logo-stop-krwotokom-system-prosty.webp" width="1200" height="600" alt="STOP KRWOTOKOM SYSTEM"/></a>
+<p class="account-kicker">PORTAL INSTRUKTORA</p>
+<h1>Dostęp na zaproszenie</h1>
+<p>Konto zakłada organizator po potwierdzeniu uprawnień. Zaproszenie otrzymasz na wskazany adres e-mail.</p>
+<p id="account-message" class="account-message" role="status" aria-live="polite">Sprawdzanie dostępności logowania…</p>
+<form id="login-form" hidden>
+<label for="account-login-email">Adres e-mail</label>
+<input id="account-login-email" type="email" autocomplete="username" maxlength="254" required/>
+<label for="account-login-password">Hasło</label>
+<input id="account-login-password" type="password" autocomplete="current-password" required/>
+<div id="account-captcha"></div>
+<button id="sign-in-submit" class="button" type="submit">Zaloguj się</button>
+<button id="reset-password" class="account-text-button" type="button">Nie pamiętam hasła</button>
+</form>
+<div id="account-connected" hidden>
+<p>Zalogowany adres: <strong id="account-email"></strong></p>
+<form id="password-form" hidden>
+<label for="account-new-password">Ustaw hasło — co najmniej 12 znaków</label>
+<input id="account-new-password" type="password" minlength="12" autocomplete="new-password" required/>
+<label for="account-repeat-password">Powtórz hasło</label>
+<input id="account-repeat-password" type="password" minlength="12" autocomplete="new-password" required/>
+<button id="set-password-submit" class="button" type="submit">Zapisz hasło</button>
+</form>
+<div class="account-actions"><a class="button" href="./#panel/home">Przejdź do portalu ↗</a><button class="account-text-button" id="account-sign-out" type="button">Wyloguj się</button></div>
+</div>
+<div class="account-help"><b>Nie masz zaproszenia?</b><p>Skontaktuj się z organizatorem: <a href="mailto:stop@h-core.edu.pl">stop@h-core.edu.pl</a>.</p></div>
+<a class="account-back" href="./#panel/home">← Wróć do podglądu portalu</a>
+<noscript><p>Do logowania potrzebna jest włączona obsługa JavaScript.</p></noscript>
+</main>
+</body>
+</html>

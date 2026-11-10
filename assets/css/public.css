@@ -694,3 +694,20 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
 @media (max-width: 900px) {
   #visitor .sk-dates-photo { max-width: 560px; justify-self: start; }
 }
+
+/* Searchable training topics and useful questions. */
+#visitor .sk-topics { background: #f7f6f3; }
+#visitor .sk-topics-intro { max-width: 710px; margin: 24px 0; color: var(--sk-muted); font-size: 14px; line-height: 1.8; }
+#visitor .sk-topic-tags { display: flex; flex-wrap: wrap; gap: 9px; margin: 28px 0 36px; }
+#visitor .sk-topic-tags a { padding: 9px 13px; border: 1px solid #dedbd5; border-radius: 4px; color: var(--sk-red); background: #fff; font-size: 12px; line-height: 1.5; text-decoration: none; }
+#visitor .sk-topic-tags a:hover { border-color: var(--sk-red); }
+#visitor .sk-topics-questions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; }
+#visitor .sk-topics details { border: 1px solid #e4e1dc; border-radius: 5px; background: #fff; scroll-margin-top: 110px; }
+#visitor .sk-topics summary { padding: 20px; color: var(--sk-ink); font-size: 14px; font-weight: 650; line-height: 1.5; cursor: pointer; }
+#visitor .sk-topics details p { margin: 0; padding: 0 20px 22px; color: var(--sk-muted); font-size: 13px; line-height: 1.8; }
+#visitor .sk-topics details a { color: var(--sk-red); text-underline-offset: 3px; }
+#visitor .sk-topic-tags a:focus-visible, #visitor .sk-topics summary:focus-visible { outline: 2px solid var(--sk-red); outline-offset: 3px; }
+#visitor .sk-dates-copy > a.button { display: inline-block; text-decoration: none; }
+#visitor .sk-footer p a { color: #fff; text-underline-offset: 3px; }
+.access-choice a.button { display: inline-block; text-decoration: none; }
+@media(max-width: 640px) { #visitor .sk-topics-questions { grid-template-columns: 1fr; } }

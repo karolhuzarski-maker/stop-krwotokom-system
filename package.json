@@ -1,0 +1,10 @@
+{
+  "name": "stop-krwotokom-system",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Strona publiczna i portal instruktora STOP KRWOTOKOM SYSTEM",
+  "scripts": {
+    "test": "node --test tests/*.test.cjs",
+    "check": "node --check assets/js/app.js && node --check assets/js/portal-auth.js && node --check assets/js/account.js && node --check assets/js/portal-config.js"
+  }
+}
