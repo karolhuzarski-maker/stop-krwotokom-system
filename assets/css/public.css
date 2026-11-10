@@ -373,7 +373,18 @@ body.guest-mode #visitor .hero-photo-wrap img.sk-cutout-photo {
 #visitor .sk-proof-figure figcaption { padding: 38px 22px 20px; font-size: 12px; font-weight: 500; background: linear-gradient(transparent, #161c22bf); }
 
 body.guest-mode #visitor .instructor-zone { padding-block: 88px; background: var(--sk-paper) !important; border-block: 1px solid var(--sk-line); }
-#visitor .sk-inst-layout { display: grid; grid-template-columns: 1.1fr 1fr; align-items: start; gap: 85px; }
+#visitor .sk-inst-watermark {
+  position: absolute;
+  top: 38%;
+  left: max(6px, calc(50% - 650px));
+  width: min(740px, 61vw);
+  aspect-ratio: 10 / 7;
+  background: url("../images/instruktor-portal-watermark.svg") center / contain no-repeat;
+  opacity: .13;
+  pointer-events: none;
+  user-select: none;
+}
+#visitor .sk-inst-layout { position: relative; display: grid; grid-template-columns: 1.1fr 1fr; align-items: start; gap: 85px; }
 #visitor .sk-inst-layout h2 { max-width: 540px; margin: 0 0 25px; font-size: clamp(30px, 3.4vw, 43px); line-height: 1.12; }
 #visitor .sk-inst-layout p { max-width: 530px; font-size: 14px; line-height: 1.85; }
 #visitor .sk-inst-layout > div > p + p { margin-top: 17px; }
@@ -444,6 +455,7 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
   #visitor .sk-inst-layout > div:first-child { max-width: 650px; }
   #visitor .sk-inst-layout p { max-width: none; }
   body.guest-mode #visitor .instructor-zone { padding-block: 65px; }
+  #visitor .sk-inst-watermark { top: 20px; left: auto; right: -80px; width: min(690px, 110vw); opacity: .065; }
   #visitor .sk-inst-aside { max-width: 650px; }
   #visitor .sk-inline-section p { max-width: 650px; }
   #visitor .sk-photo-proof { gap: 14px !important; }

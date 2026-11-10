@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="700" viewBox="0 0 1000 700" fill="none" stroke="#963032" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+  <title>Materiały, szkolenia i portal instruktora</title>
+  <!-- Original decorative artwork. No text or third-party marks. -->
+  <g stroke-width="2.5">
+    <path d="M245 165C324 169 318 229 358 256M503 132V226M758 185L660 265M815 411L714 384M596 567L559 507M228 510L349 445"/>
+    <path d="M240 135C380 9 641 14 769 120M850 229C930 348 885 538 700 609M472 627C315 650 174 615 126 466M118 324C105 268 119 228 142 199" stroke-dasharray="3 13"/>
+  </g>
+  <!-- A tablet with a course dashboard, not a reproduction of the reference. -->
+  <rect x="290" y="220" width="430" height="293" rx="28" stroke-width="6"/>
+  <rect x="312" y="243" width="386" height="235" rx="10" stroke-width="3"/>
+  <path d="M484 495H526M312 297H698M451 297V478" stroke-width="3"/>
+  <circle cx="344" cy="271" r="9"/>
+  <path d="M366 265H420M366 276H402M335 324H425M335 346H402M335 368H415M335 390H391"/>
+  <g stroke-width="3">
+    <rect x="472" y="321" width="91" height="62" rx="7"/>
+    <path d="M511 339L530 352L511 365Z"/>
+    <rect x="583" y="321" width="91" height="62" rx="7"/>
+    <path d="M604 344L613 353L634 332M604 369H653"/>
+    <path d="M474 406H674M474 427H625M474 448H652"/>
+  </g>
+  <!-- Teaching resources. -->
+  <circle cx="186" cy="135" r="59" stroke-width="3"/>
+  <path d="M150 110C166 105 178 109 186 116C195 109 208 105 223 110V157C207 152 195 155 186 162C176 155 163 152 150 157ZM186 117V161M160 123L174 126M160 136L174 139M199 125L214 122M199 139L214 135" stroke-width="3"/>
+  <!-- Instructor community. -->
+  <circle cx="503" cy="75" r="57" stroke-width="3"/>
+  <circle cx="503" cy="61" r="13"/>
+  <path d="M479 101V94C479 82 488 77 503 77S527 82 527 94V101M472 54C457 54 456 76 471 76M458 99V93C458 85 462 82 470 81M534 54C549 54 550 76 535 76M548 99V93C548 85 544 82 536 81" stroke-width="3"/>
+  <!-- Certificate. -->
+  <circle cx="809" cy="149" r="64" stroke-width="3"/>
+  <path d="M780 173V110H838V154M791 124H826M791 137H819M791 150H806M818 175L815 191L827 184L836 194L839 175" stroke-width="3"/>
+  <circle cx="828" cy="164" r="15" stroke-width="3"/>
+  <!-- A personal instructor ID. -->
+  <circle cx="874" cy="419" r="60" stroke-width="3"/>
+  <rect x="837" y="393" width="74" height="52" rx="6" stroke-width="3"/>
+  <circle cx="857" cy="410" r="8" stroke-width="3"/>
+  <path d="M846 431C846 418 869 418 869 431M880 408H900M880 420H900M880 432H891" stroke-width="3"/>
+  <!-- A library folder. -->
+  <circle cx="615" cy="624" r="60" stroke-width="3"/>
+  <path d="M580 645V601H606L615 610H651V645ZM588 609V592H617L626 601H643V609" stroke-width="3"/>
+  <!-- Skills and observation sheet. -->
+  <circle cx="171" cy="544" r="63" stroke-width="3"/>
+  <path d="M149 511H142V579H198V511H190M158 507V516H182V507ZM153 536L158 541L166 530M176 536H188M153 558L158 563L166 552M176 558H188" stroke-width="3"/>
+  <g fill="#963032" stroke="none"><circle cx="269" cy="307" r="5"/><circle cx="739" cy="531" r="5"/><circle cx="388" cy="589" r="5"/><circle cx="676" cy="109" r="4"/><circle cx="144" cy="367" r="4"/></g>
+</svg>
