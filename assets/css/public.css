@@ -341,7 +341,7 @@ body.guest-mode #visitor .hero-photo-wrap img.sk-cutout-photo {
 #visitor .split-heading { display: grid; grid-template-columns: 1.1fr 1fr; align-items: end; gap: 80px; margin-bottom: 35px; }
 #visitor .split-heading h2 { margin-bottom: 0; }
 #visitor .split-heading > p { max-width: 460px; margin: 0; color: var(--sk-muted); font-size: 14px; line-height: 1.8; }
-#visitor .program-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+#visitor .program-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
 #visitor .program-card {
   position: relative;
   display: flex;
@@ -591,6 +591,11 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+@media (min-width: 1001px) {
+  #visitor .program-card-illustrated h3 { font-size: 6.7cqi; }
+  #visitor .program-card-illustrated p { font-size: 3.65cqi; }
+  #visitor .program-card-illustrated .card-bottom { font-size: 3.15cqi; }
 }
 @media (max-width: 1000px) {
   #visitor .program-cards { grid-template-columns: 1fr; gap: 24px; }
