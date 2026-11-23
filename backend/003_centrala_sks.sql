@@ -5,6 +5,7 @@ begin;
 
 create table if not exists public.portal_admins (
   user_id uuid primary key references auth.users(id) on delete cascade,
+  master_slot smallint not null default 1 unique check (master_slot = 1),
   created_at timestamptz not null default now()
 );
 alter table public.portal_admins enable row level security;
