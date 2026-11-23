@@ -1,0 +1,175 @@
+/* STOP KRWOTOKOM SYSTEM — widoczne przejscia strona ↔ portal.
+   Celowo izolowane style: bez zmian w sekcjach publicznych i zawartosci panelu. */
+
+#visitor .mobile-panel-entry { display: none; }
+
+#visitor .sitenav .panel-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 12px 19px;
+  border: 1px solid #963032;
+  border-radius: 7px;
+  background: #963032;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(114, 33, 35, .15);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: .015em;
+  text-transform: none;
+  white-space: nowrap;
+  transition: background-color .16s ease, border-color .16s ease, box-shadow .16s ease;
+}
+#visitor .sitenav .panel-btn:hover {
+  background: #792528;
+  border-color: #792528;
+  color: #fff;
+  box-shadow: 0 5px 14px rgba(114, 33, 35, .22);
+}
+#visitor .sitenav .panel-btn:focus-visible,
+#visitor .mobile-panel-entry:focus-visible {
+  outline: 3px solid #25282b;
+  outline-offset: 3px;
+}
+#visitor .footer-panel-link {
+  min-height: 45px;
+  padding: 11px 18px;
+  border: 1px solid #e6a7a7;
+  border-radius: 7px;
+  background: #fff;
+  color: #85262a;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+#visitor .footer-panel-link:hover {
+  background: #fceeed;
+  color: #85262a;
+  border-color: #fff;
+}
+
+.shell .topbar .demo-switch {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 46px;
+  padding: 11px 18px;
+  margin-left: 8px;
+  border: 1px solid #963032;
+  border-radius: 7px;
+  background: #963032;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: background-color .16s ease, box-shadow .16s ease;
+}
+.shell .topbar .demo-switch:hover {
+  background: #792528;
+  border-color: #792528;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(114,33,35,.18);
+}
+.shell .topbar .demo-switch:focus-visible {
+  outline: 3px solid #25282b;
+  outline-offset: 3px;
+}
+
+@media (max-width: 1180px) and (min-width: 661px) {
+  .shell .topbar {
+    height: auto;
+    min-height: 76px;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    padding-block: 13px;
+  }
+  .shell .topbar > .inline-actions {
+    flex-wrap: wrap;
+    margin-left: auto;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 1000px) {
+  #visitor .header-inside {
+    row-gap: 8px;
+  }
+  #visitor .mobile-panel-entry {
+    order: 3;
+    display: inline-flex;
+    width: 100%;
+    min-height: 49px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 1px 0 7px;
+    padding: 11px 18px;
+    border: 1px solid #963032;
+    border-radius: 7px;
+    color: #fff;
+    background: #963032;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: .015em;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(114,33,35,.13);
+  }
+  #visitor .mobile-panel-entry:hover {
+    background: #792528;
+    border-color: #792528;
+  }
+  #visitor .mobile-panel-entry .switch-arrow {
+    font-size: 20px;
+    line-height: 1;
+  }
+  #visitor .sitenav { order: 4; }
+  #visitor .sitenav .panel-btn { display: none; }
+}
+
+@media (max-width: 660px) {
+  .shell .topbar {
+    padding: 13px 16px 15px;
+  }
+  .shell .topbar > .inline-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+  }
+  .shell .topbar > .inline-actions #portal-status {
+    justify-self: start;
+    max-width: 100%;
+    min-width: 0;
+    white-space: normal;
+    line-height: 1.35;
+  }
+  .shell .topbar > .inline-actions #portal-controls {
+    justify-self: end;
+  }
+  .shell .topbar > .inline-actions .demo-switch {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+    width: 100%;
+    min-height: 49px;
+    margin: 0;
+    padding: 13px 16px;
+    font-size: 14px;
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #visitor .sitenav .panel-btn,
+  #visitor .mobile-panel-entry,
+  .shell .topbar .demo-switch {
+    transition: none;
+  }
+}
