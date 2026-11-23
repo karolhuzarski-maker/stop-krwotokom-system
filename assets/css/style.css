@@ -620,3 +620,26 @@ body.guest-mode .brand-link{flex-shrink:0;gap:17px}
 .sk-home-link-arrow{font-size:24px;color:#a72e35;flex:none}
 @media(max-width:990px){.sk-home-links{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:690px){.sk-home-overview,.sk-home-links{grid-template-columns:1fr}.sk-home-link{min-height:88px}}
+
+/* SKS | Prywatna biblioteka dokumentów instruktorskich */
+.sk-material-intro {margin-bottom:20px;max-width:760px;}
+.sk-material-intro p {font-size:13px;line-height:1.7;}
+.sk-material-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;}
+.sk-document-card {display:flex;flex-direction:column;gap:12px;min-width:0;min-height:248px;}
+.sk-document-code {font-weight:800;font-size:13px;letter-spacing:.04em;color:#963032;}
+.sk-document-code span {display:inline-block;margin-left:7px;font-size:10px;letter-spacing:.035em;color:#667078;font-weight:650;}
+.sk-document-card h2 {font-size:20px;margin:0;}
+.sk-document-card p {font-size:13px;line-height:1.55;}
+.sk-document-bottom {display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:auto;padding-top:14px;border-top:1px solid #e7e3e0;}
+.sk-document-bottom .tag {font-size:11px;}
+.sk-document-open {padding:9px 14px;font-size:12px;}
+.sk-material-admin {margin-top:22px;background:#fbf9f8;border-color:#dec9c9;}
+.sk-material-admin h2 {font-size:18px;}
+.sk-material-admin>p {font-size:13px;max-width:800px;}
+.sk-material-upload-row {display:flex;align-items:center;flex-wrap:wrap;gap:14px;margin-top:19px;}
+.sk-material-upload-row input[type=file] {flex:1;min-width:180px;padding:12px;border:1px solid #d9cbcb;border-radius:7px;background:white;font:inherit;font-size:12px;}
+.sk-material-upload-row button {min-height:46px;}
+.sk-material-upload-row button:disabled {opacity:.55;cursor:wait;}
+.sk-material-upload-status {margin-top:11px;color:#4c6260;font-size:12px;}
+@media(max-width:1100px){.sk-material-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:710px){.sk-material-grid{grid-template-columns:1fr;}.sk-document-card{min-height:0;}.sk-material-upload-row input[type=file],.sk-material-upload-row button{width:100%;}.sk-material-upload-row{align-items:stretch;}}
