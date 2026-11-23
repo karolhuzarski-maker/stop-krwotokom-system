@@ -149,8 +149,8 @@
   }
 
   // Zapis szkoleń: bazowa tabela ma RLS; klient nigdy nie przyjmuje właściciela z formularza.
-  async function addInstructorCourse(input) {
-    if (state.mode !== 'active') throw new Error('Dodawanie szkoleń wymaga aktywnej autoryzacji.');
+  const courseIdPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  function normalizeCourseInput(input) {
     const date = String(input && input.training_date || '').trim();
     const location = String(input && input.location_name || '').trim();
     const count = Number(input && input.participant_count);
@@ -167,16 +167,56 @@
       throw new Error('Podaj liczbę uczestników od 1 do 1000.');
     }
     if (notes.length > 1000) throw new Error('Uwagi mogą mieć maksymalnie 1000 znaków.');
+    return {training_date:date,location_name:location,participant_count:count,notes};
+  }
+  async function verifiedInstructorUser(api) {
+    const result = await api.auth.getUser();
+    if (result.error || !result.data || !result.data.user) {
+      throw new Error('Sesja wygasła. Zaloguj się ponownie.');
+    }
+    return result.data.user;
+  }
+  async function addInstructorCourse(input) {
+    if (state.mode !== 'active') throw new Error('Dodawanie szkoleń wymaga aktywnej autoryzacji.');
+    const payload = normalizeCourseInput(input);
     const api = await requireClient();
-    const { error } = await api.from('sk_courses').insert({
-      training_date: date, location_name: location, participant_count: count, notes
-    });
+    const { error } = await api.from('sk_courses').insert(payload);
     if (error) {
       if (error.code === '42P01' || error.code === 'PGRST205') {
         throw new Error('Rejestr szkoleń wymaga jednorazowej aktywacji w Supabase.');
       }
       throw new Error('Nie udało się zapisać szkolenia. Spróbuj ponownie lub skontaktuj się z Centralą SKS.');
     }
+    return true;
+  }
+  async function updateInstructorCourse(courseId, input) {
+    if (state.mode !== 'active') throw new Error('Edycja szkolenia wymaga aktywnej autoryzacji.');
+    if (typeof courseId !== 'string' || !courseIdPattern.test(courseId)) {
+      throw new Error('Nieprawidłowy identyfikator szkolenia.');
+    }
+    const payload = normalizeCourseInput(input);
+    const api = await requireClient();
+    const user = await verifiedInstructorUser(api);
+    // RLS and column-scoped SQL grants enforce ownership and prevent changing the instructor.
+    const { data, error } = await api.from('sk_courses').update(payload)
+      .eq('id', courseId).eq('instructor_user_id', user.id)
+      .select('id').maybeSingle();
+    if (error) throw new Error('Nie udało się zapisać zmian. Sprawdź, czy uruchomiono skrypt uprawnień 006.');
+    if (!data) throw new Error('Nie znaleziono szkolenia lub nie masz uprawnień do jego edycji.');
+    return true;
+  }
+  async function deleteInstructorCourse(courseId) {
+    if (state.mode !== 'active') throw new Error('Usuwanie szkolenia wymaga aktywnej autoryzacji.');
+    if (typeof courseId !== 'string' || !courseIdPattern.test(courseId)) {
+      throw new Error('Nieprawidłowy identyfikator szkolenia.');
+    }
+    const api = await requireClient();
+    const user = await verifiedInstructorUser(api);
+    const { data, error } = await api.from('sk_courses').delete()
+      .eq('id', courseId).eq('instructor_user_id', user.id)
+      .select('id').maybeSingle();
+    if (error) throw new Error('Nie udało się usunąć szkolenia. Sprawdź, czy uruchomiono skrypt uprawnień 006.');
+    if (!data) throw new Error('Nie znaleziono szkolenia lub nie masz uprawnień do jego usunięcia.');
     return true;
   }
   async function listMyCourses() {
@@ -232,6 +272,6 @@
     isConfigured: () => configured, needsCaptcha: () => Boolean(config.turnstileSiteKey),
     getState: snapshot, init, refresh, signIn, signOut, setPassword, resetPassword, mountCaptcha, listCentralInstructors,
     listInstructorMaterials, getInstructorMaterialUrl, uploadInstructorMaterials,
-    addInstructorCourse, listMyCourses, listCentralCourses
+    addInstructorCourse, updateInstructorCourse, deleteInstructorCourse, listMyCourses, listCentralCourses
   });
 });
