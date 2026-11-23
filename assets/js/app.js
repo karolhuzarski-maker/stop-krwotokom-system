@@ -275,6 +275,73 @@ async function openSKMaterial(fileName) {
   }
 }
 
+
+/* Indywidualna legitymacja: dane wyłącznie z uwierzytelnionego profilu Supabase.
+   A5 jednostronne; brak fikcyjnych QR, podpisów, zdjęć i dat wydania. */
+function renderInstructorCredential(state) {
+  const p = state.profile || {};
+  const isActive = state.mode === 'active';
+  const name = mk(p.display_name || 'Dane instruktora nieuzupełnione');
+  const instructorNumber = mk(p.instructor_id || 'Numer nie został nadany');
+  const validUntil = p.valid_until ? mk(dateFormat(p.valid_until)) : 'Nie ustalono';
+  const statusLabel = isActive ? 'AKTYWNA' : 'NIEAKTYWNA';
+  return '<article class="sk-id-paper ' + (isActive ? 'sk-id-active' : 'sk-id-inactive') +
+    '" id="sk-instructor-id" aria-label="Legitymacja instruktora STOP KRWOTOKOM SYSTEM">' +
+    '<div class="sk-id-masthead">' +
+    '<div class="sk-id-brand-sks"><img src="assets/images/logo-stop-krwotokom-system-prosty.webp" alt="STOP KRWOTOKOM SYSTEM"></div>' +
+    '<span class="sk-id-brand-rule" aria-hidden="true"></span>' +
+    '<img class="sk-id-brand-hcore" src="assets/images/h-core-edu-mark.svg" alt="H-CORE EDU">' +
+    '</div>' +
+    '<div class="sk-id-banner"><span>POLSKI SYSTEM KONTROLI KRWOTOKÓW</span>' +
+    '<strong>LEGITYMACJA<br>INSTRUKTORA</strong></div>' +
+    '<div class="sk-id-main">' +
+    '<div class="sk-id-watermark" aria-hidden="true">SKS</div>' +
+    '<div class="sk-id-main-kicker">AUTORYZACJA INSTRUKTORSKA</div>' +
+    '<div class="sk-id-person"><span>IMIĘ I NAZWISKO</span><strong>' + name + '</strong></div>' +
+    '<div class="sk-id-number"><span>NUMER INSTRUKTORA</span><strong>' + instructorNumber + '</strong></div>' +
+    '<div class="sk-id-details">' +
+      '<div><span>WAŻNA DO</span><strong>' + validUntil + '</strong></div>' +
+      '<div><span>STATUS AUTORYZACJI</span><strong class="sk-id-status">' + statusLabel + '</strong></div>' +
+    '</div>' +
+    '<div class="sk-id-endorsement"><span class="sk-id-endorsement-mark" aria-hidden="true">✦</span>' +
+    '<div><b>STOP KRWOTOKOM SYSTEM</b><small>Autoryzowany program szkoleniowy H-CORE EDU</small></div></div>' +
+    '</div>' +
+    '<footer class="sk-id-footer"><div><strong>H-CORE EDU</strong><span>Organizator programu</span></div>' +
+    '<p>Dokument potwierdza status autoryzacji w chwili jego wygenerowania.<br>' +
+    'Aktualność uprawnień potwierdza organizator.</p>' +
+    '<b>stopkrwotokom-system.pl</b></footer>' +
+    '</article>';
+}
+async function printInstructorCredential() {
+  const button = document.getElementById('sk-id-print-button');
+  if (button) { button.disabled = true; button.textContent = 'Sprawdzanie danych…'; }
+  try {
+    if (!window.SKAuth || typeof window.SKAuth.refresh !== 'function') throw new Error('Brak połączenia z kontem.');
+    const state = await window.SKAuth.refresh();
+    if (state.mode !== 'active' || !state.profile ||
+        !state.profile.instructor_id || !state.profile.display_name || !state.profile.valid_until) {
+      throw new Error('Legitymację można wydrukować wyłącznie dla aktywnego, kompletnego profilu instruktora.');
+    }
+    if (current !== 'profile') return;
+    // Refresh dispatches sk:access; draw again if necessary before print.
+    draw();
+    const badge = document.getElementById('sk-instructor-id');
+    if (!badge) throw new Error('Nie udało się przygotować legitymacji.');
+    await Promise.all(Array.from(badge.querySelectorAll('img')).map(img =>
+      img.complete ? Promise.resolve() : new Promise(resolve => {
+        img.addEventListener('load', resolve, {once:true});
+        img.addEventListener('error', resolve, {once:true});
+      })
+    ));
+    window.print();
+  } catch (error) {
+    modal('Legitymacja instruktora', '<p>' + mk(error && error.message || 'Nie udało się przygotować legitymacji.') + '</p>');
+  } finally {
+    const currentButton = document.getElementById('sk-id-print-button');
+    if (currentButton) { currentButton.disabled = false; currentButton.textContent = 'Zapisz jako PDF / drukuj A5'; }
+  }
+}
+
 function drawConnectedPortal() {
   const state = getAuthState();
   const v = document.getElementById('view');
@@ -326,24 +393,37 @@ function drawConnectedPortal() {
       '<div class="sk-home-links">' + actions + '</div>';
     return;
   }
+
   if (current === 'profile') {
-    const profileCard = '<div class="grid"><section class="card span2">' +
-      '<div class="badgeid"><div class="eyebrow">STOP KRWOTOKOM SYSTEM</div>' +
-      '<strong>INSTRUKTOR</strong><div class="line"></div>' +
-      '<b>' + name + '</b><div class="id">' + id + '</div>' +
-      '<p class="subtle" style="margin-top:12px">' + mk(state.email) + '</p>' +
-      '<p style="margin-top:12px"><span class="tag ' + (active ? 'green' : 'gold') + '">' + status + '</span></p>' +
-      '<p style="margin-top:12px"><b>Ważność licencji:</b> ' + expiry + '</p></div></section>' +
-      '<section class="card"><h2>Twoje uprawnienia</h2>' +
-      '<p>Numer SKS-I jest stały. O zakresie i ważności autoryzacji decyduje organizator.</p>' +
-      '<a class="button secondary" style="display:inline-block;margin-top:18px" href="mailto:stop@h-core.edu.pl">Kontakt z organizatorem</a></section></div>';
+    const hasData = Boolean(profile.instructor_id && profile.display_name && profile.valid_until);
+    const printing = active && hasData;
+    const actions =
+      '<section class="card sk-id-action-card"><div class="eyebrow">TWOJA LEGITYMACJA</div>' +
+      '<h2>Legitymacja instruktora A5</h2>' +
+      '<p>Dane z Twojego konta w STOP KRWOTOKOM SYSTEM. Numer, nazwisko, status i data ważności aktualizują się automatycznie po zmianie w Supabase.</p>' +
+      '<button id="sk-id-print-button" type="button" class="button sk-id-print" ' +
+      (printing ? '' : 'disabled ') +
+      'onclick="printInstructorCredential()">Zapisz jako PDF / drukuj A5</button>' +
+      '<p class="subtle sk-id-availability">' +
+      (printing
+        ? 'Przed wydrukiem sprawdzimy ponownie aktualny status konta. W oknie drukowania wybierz „Zapisz jako PDF”.'
+        : 'Drukowanie będzie dostępne po aktywowaniu licencji i uzupełnieniu danych przez organizatora.') +
+      '</p></section>';
+    const details =
+      '<section class="card sk-id-detail-card"><h2>Dane i uprawnienia</h2>' +
+      '<p><b>Numer instruktora:</b> ' + id + '</p>' +
+      '<p><b>Adres konta:</b> ' + mk(state.email) + '</p>' +
+      '<p><b>Ważność autoryzacji:</b> ' + expiry + '</p>' +
+      '<p><span class="tag ' + (active ? 'green' : 'gold') + '">' + status + '</span></p>' +
+      '<p class="subtle">Numer SKS-I pozostaje niezmienny przy odnowieniu licencji. Datę ważności i status określa Centrala SKS.</p></section>';
     const documents =
-      '<section class="card" style="margin-top:18px"><h2>Dokumenty systemowe</h2>' +
-      '<p>Dokumenty możesz otworzyć, pobrać lub zapisać jako PDF.</p>' +
-      '<div class="inline-actions" style="margin-top:16px;gap:10px"><a class="button secondary" href="regulamin-portalu.html">Regulamin portalu ↗</a>' +
-      '<a class="button secondary" href="polityka-prywatnosci.html">Polityka prywatności (RODO) ↗</a></div></section>' +
-      '<p class="subtle" style="margin-top:18px">Licencja instruktorska PDF i identyfikator do pobrania zostaną udostępnione po uruchomieniu modułu dokumentów.</p>';
-    v.innerHTML = head('Mój profil i ID', 'Twoje dane, numer SKS-I i dokumenty.') + profileCard + documents;
+      '<section class="card sk-id-documents"><h2>Dokumenty systemowe</h2>' +
+      '<div class="sk-id-document-links"><a href="regulamin-portalu.html">Regulamin portalu ↗</a>' +
+      '<a href="polityka-prywatnosci.html">Polityka prywatności (RODO) ↗</a></div></section>';
+    v.innerHTML = head('Mój profil i ID', 'Twoja legitymacja instruktorska i dane autoryzacji.') +
+      '<div class="sk-profile-credential">' +
+      '<div class="sk-id-preview-col">' + renderInstructorCredential(state) + '</div>' +
+      '<div class="sk-id-sidebar-col">' + actions + details + documents + '</div></div>';
     return;
   }
   const titles = {courses:'Moje szkolenia', addCourse:'Dodaj szkolenie', materials:'Materiały'};
@@ -372,6 +452,10 @@ function go(name, updateAddress = true) {
   document.getElementById('crumb').textContent = tabs.find(tab => tab[2] === name)?.[0] || 'Pulpit instruktora';
   draw();
   window.scrollTo(0, 0);
+  // Re-verify the profile on navigation; the access event redraws it with fresh server data.
+  if (name === 'profile' && window.SKAuth?.isConfigured()) {
+    window.SKAuth.refresh().catch(() => {});
+  }
   if (updateAddress && !document.body.classList.contains('guest-mode')) {
     const route = '#panel/' + name;
     if (location.hash !== route) location.hash = route;
