@@ -104,6 +104,49 @@
     if (error || !Array.isArray(data)) throw new Error('Nie udało się pobrać rejestru instruktorów.');
     return data;
   }
+  // Private materials: listing and signed links are authorised by Supabase Storage RLS.
+  const materialNamePattern = /^SK-[0-9]{2}_[A-Za-z0-9._-]+[.]pdf$/;
+  function mayReadMaterials() {
+    return state.mode === 'active' || state.isAdmin === true;
+  }
+  async function listInstructorMaterials() {
+    if (!mayReadMaterials()) throw new Error('Brak aktywnego dostępu do materiałów SKS.');
+    const api = await requireClient();
+    const { data, error } = await api.storage.from('instructor-materials')
+      .list('', { limit: 100, sortBy: { column: 'name', order: 'asc' } });
+    if (error || !Array.isArray(data)) throw new Error('Nie udało się pobrać prywatnej biblioteki SKS.');
+    return data.filter(item => item && materialNamePattern.test(item.name));
+  }
+  async function getInstructorMaterialUrl(fileName) {
+    if (!mayReadMaterials()) throw new Error('Brak aktywnego dostępu do materiałów SKS.');
+    if (typeof fileName !== 'string' || !materialNamePattern.test(fileName)) throw new Error('Nieprawidłowy dokument SKS.');
+    const api = await requireClient();
+    const { data, error } = await api.storage.from('instructor-materials')
+      .createSignedUrl(fileName, 60);
+    if (error || !data || !data.signedUrl) throw new Error('Nie można otworzyć pliku. Spróbuj ponownie.');
+    return data.signedUrl;
+  }
+  async function uploadInstructorMaterials(inputFiles) {
+    if (state.isAdmin !== true) throw new Error('Publikacja materiałów wymaga uprawnień Centrali SKS.');
+    const files = Array.from(inputFiles || []);
+    if (!files.length || files.length > 15) throw new Error('Wybierz od 1 do 15 plików PDF.');
+    for (const file of files) {
+      if (!file || !materialNamePattern.test(file.name) ||
+          !Number.isFinite(file.size) || file.size < 100 || file.size > 10 * 1024 * 1024 ||
+          (file.type && file.type !== 'application/pdf')) {
+        throw new Error('Dozwolone są pliki SK-XX_*.pdf o wielkości do 10 MB.');
+      }
+    }
+    const api = await requireClient();
+    const store = api.storage.from('instructor-materials');
+    for (const file of files) {
+      const { error } = await store.upload(file.name, file, {
+        upsert: true, contentType: 'application/pdf', cacheControl: '60'
+      });
+      if (error) throw new Error('Nie udało się przesłać: ' + file.name + '. Sprawdź uprawnienia w Supabase.');
+    }
+    return files.map(file => file.name);
+  }
   async function setPassword(password) {
     if (typeof password !== 'string' || password.length < 12) throw new Error('Hasło musi mieć co najmniej 12 znaków.');
     const api = await requireClient();
@@ -132,6 +175,7 @@
   }
   return Object.freeze({
     isConfigured: () => configured, needsCaptcha: () => Boolean(config.turnstileSiteKey),
-    getState: snapshot, init, refresh, signIn, signOut, setPassword, resetPassword, mountCaptcha, listCentralInstructors
+    getState: snapshot, init, refresh, signIn, signOut, setPassword, resetPassword, mountCaptcha, listCentralInstructors,
+    listInstructorMaterials, getInstructorMaterialUrl, uploadInstructorMaterials
   });
 });
