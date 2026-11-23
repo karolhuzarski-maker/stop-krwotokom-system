@@ -728,3 +728,74 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
 #visitor .sk-footer p a { color: #fff; text-underline-offset: 3px; }
 .access-choice a.button { display: inline-block; text-decoration: none; }
 @media(max-width: 640px) { #visitor .sk-topics-questions { grid-template-columns: 1fr; } }
+
+
+/* STOP KRWOTOKOM SYSTEM | delikatne odświeżenie sekcji instruktorskiej.
+   Wyraźniejsze chmurki oraz przejrzysta lista uprawnionych zawodów. */
+body.guest-mode #visitor .sk-inst-watermark {
+  opacity: .27;
+}
+#visitor .sk-inst-copy { min-width: 0; }
+#visitor .sk-inst-qualifications {
+  margin: 24px 0 20px;
+}
+#visitor .sk-inst-qualifications h3 {
+  margin: 0 0 12px;
+  color: var(--sk-ink);
+  font-size: 15px;
+  font-weight: 750;
+  letter-spacing: -.01em;
+}
+#visitor .sk-inst-qualification-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+#visitor .sk-inst-qualification-list li {
+  display: flex;
+  align-items: center;
+  min-height: 61px;
+  padding: 12px 13px;
+  border: 1px solid #dccac8;
+  border-left: 3px solid #963032;
+  border-radius: 7px;
+  background: rgba(255,255,255,.94);
+  color: #33383b;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.45;
+  box-shadow: 0 3px 12px rgba(60,38,38,.035);
+}
+#visitor .sk-inst-layout .sk-inst-authorization {
+  max-width: 540px;
+  margin-top: 18px;
+  padding-left: 13px;
+  border-left: 2px solid #b65c5c;
+  color: #5c6061;
+  font-size: 13px;
+}
+@media (max-width: 900px) {
+  body.guest-mode #visitor .sk-inst-watermark {
+    opacity: .16;
+  }
+}
+@media (max-width: 460px) {
+  #visitor .sk-inst-qualification-list {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  #visitor .sk-inst-qualification-list li {
+    min-height: 49px;
+    padding: 11px 13px;
+    font-size: 12px;
+  }
+  #visitor .sk-inst-qualifications {
+    margin-top: 20px;
+  }
+  body.guest-mode #visitor .sk-inst-watermark {
+    opacity: .15;
+  }
+}
