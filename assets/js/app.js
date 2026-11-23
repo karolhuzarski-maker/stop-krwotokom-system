@@ -24,6 +24,7 @@ const dateFormat = date => new Date(date + 'T12:00:00').toLocaleDateString('pl-P
 const getAuthState = () => window.SKAuth ? window.SKAuth.getState() : {mode:'guest', email:'', profile:null};
 const isSignedIn = state => state.mode === 'active' || state.mode === 'blocked';
 let centralDrawVersion = 0;
+let materialsDrawVersion = 0;
 
 function nav() {
   const state = getAuthState();
@@ -184,6 +185,95 @@ async function drawCentral(state) {
   }
 }
 
+
+const skMaterialCatalogue = [
+  {name:'SK-01_Preambula_SKS_0.9.pdf', code:'SK-01', title:'Preambuła',
+    detail:'Założenia i wartości polskiego systemu kontroli krwotoków.'},
+  {name:'SK-02_Karta_programu_SKS_0.9.pdf', code:'SK-02', title:'Karta programu',
+    detail:'Cele, moduły i efekty uczenia się kursu podstawowego.'},
+  {name:'SK-03_Standard_szkoleniowy_SKS_0.9.pdf', code:'SK-03', title:'Standard szkoleniowy',
+    detail:'Obowiązujące założenia technik, organizacji ćwiczeń i oceny uczestnika.'}
+];
+function renderSKMaterials(files, isAdmin) {
+  const available = new Set(files.map(file => file.name));
+  const cards = skMaterialCatalogue.map(doc => {
+    const ready = available.has(doc.name);
+    return '<article class="card sk-document-card">' +
+      '<div class="sk-document-code">' + doc.code + ' <span>WERSJA ROBOCZA 0.9</span></div>' +
+      '<h2>' + doc.title + '</h2><p>' + doc.detail + '</p>' +
+      '<div class="sk-document-bottom">' +
+      (ready
+        ? '<span class="tag green">Dostępny PDF</span>' +
+          '<button type="button" class="button sk-document-open" data-file="' + doc.name +
+          '" onclick="openSKMaterial(this.dataset.file)">Otwórz PDF ↗</button>'
+        : '<span class="tag gold">Oczekuje na publikację</span>') +
+      '</div></article>';
+  }).join('');
+  const admin = isAdmin ?
+    '<section class="card sk-material-admin"><h2>Publikacja dokumentów — Centrala SKS</h2>' +
+    '<p>Wybierz przygotowane pliki PDF (możesz zaznaczyć wszystkie trzy naraz). Po przesłaniu będą dostępne wyłącznie dla aktywnych instruktorów i Centrali SKS. Ponowne przesłanie pliku o tej samej nazwie zastąpi poprzednią wersję.</p>' +
+    '<div class="sk-material-upload-row"><input id="sk-material-upload" type="file" accept=".pdf,application/pdf" multiple aria-label="Wybierz pliki PDF do prywatnej biblioteki"/>' +
+    '<button class="button" id="sk-material-upload-button" type="button" onclick="uploadSKMaterials()">Opublikuj pliki PDF</button></div>' +
+    '<p class="sk-material-upload-status" id="sk-material-upload-status" role="status" aria-live="polite"></p></section>' : '';
+  return '<div class="sk-material-intro"><p>Dokumenty systemowe dostępne dla autoryzowanych instruktorów. Pliki są przechowywane w prywatnym magazynie Supabase, nie na publicznej stronie.</p></div>' +
+    '<div class="sk-material-grid">' + cards + '</div>' + admin +
+    '<p class="subtle" style="margin-top:18px">Wydanie 0.9 jest robocze; dokumenty będą aktualizowane po dalszym audycie.</p>';
+}
+async function drawMaterials(state) {
+  const view = document.getElementById('view');
+  const version = ++materialsDrawVersion;
+  view.innerHTML = head('Materiały instruktorskie', 'Oficjalna biblioteka dokumentów STOP KRWOTOKOM SYSTEM.') +
+    '<section class="card"><p>Ładowanie prywatnej biblioteki…</p></section>';
+  try {
+    const files = await window.SKAuth.listInstructorMaterials();
+    if (version !== materialsDrawVersion || current !== 'materials') return;
+    const latest = window.SKAuth.getState();
+    if (latest.mode !== 'active' && latest.isAdmin !== true) return;
+    view.innerHTML = head('Materiały instruktorskie', 'Oficjalna biblioteka dokumentów STOP KRWOTOKOM SYSTEM.') +
+      renderSKMaterials(files, latest.isAdmin === true);
+  } catch (_) {
+    if (version !== materialsDrawVersion || current !== 'materials') return;
+    view.innerHTML = head('Materiały instruktorskie', 'Biblioteka prywatna STOP KRWOTOKOM SYSTEM.') +
+      '<section class="card"><h2>Biblioteka jest chwilowo niedostępna</h2>' +
+      '<p>Nie udało się pobrać dokumentów. Spróbuj ponownie albo skontaktuj się z organizatorem.</p>' +
+      '<button type="button" class="button secondary" style="margin-top:15px" onclick="go(\'materials\')">Odśwież bibliotekę</button></section>';
+  }
+}
+async function uploadSKMaterials() {
+  const input = document.getElementById('sk-material-upload');
+  const button = document.getElementById('sk-material-upload-button');
+  const status = document.getElementById('sk-material-upload-status');
+  if (!input || !button || !status) return;
+  if (!input.files.length) { status.textContent = 'Najpierw wybierz pliki PDF.'; return; }
+  button.disabled = true;
+  status.textContent = 'Trwa przesyłanie plików do prywatnej biblioteki…';
+  try {
+    const files = await window.SKAuth.uploadInstructorMaterials(input.files);
+    status.textContent = 'Opublikowano: ' + files.length + ' plik(i).';
+    go('materials', false);
+  } catch (error) {
+    status.textContent = error && error.message ? error.message : 'Nie udało się opublikować dokumentów.';
+  } finally {
+    button.disabled = false;
+  }
+}
+async function openSKMaterial(fileName) {
+  // Reserve the new tab immediately on click: browsers would block it after an async request.
+  const tab = window.open('', '_blank');
+  try {
+    const url = await window.SKAuth.getInstructorMaterialUrl(fileName);
+    if (tab && !tab.closed) {
+      tab.opener = null;
+      tab.location.replace(url);
+    } else {
+      window.location.assign(url);
+    }
+  } catch (error) {
+    if (tab && !tab.closed) tab.close();
+    window.alert(error && error.message ? error.message : 'Nie można otworzyć dokumentu.');
+  }
+}
+
 function drawConnectedPortal() {
   const state = getAuthState();
   const v = document.getElementById('view');
@@ -194,6 +284,10 @@ function drawConnectedPortal() {
     return;
   }
   if (current === 'verify') return drawGuest();
+  if (current === 'materials') {
+    drawMaterials(state);
+    return;
+  }
   if (current === 'central') {
     if (state.isAdmin !== true) {
       v.innerHTML = head('Centrala SKS', 'Dostęp ograniczony.') +
