@@ -25,6 +25,9 @@ const getAuthState = () => window.SKAuth ? window.SKAuth.getState() : {mode:'gue
 const isSignedIn = state => state.mode === 'active' || state.mode === 'blocked';
 let centralDrawVersion = 0;
 let materialsDrawVersion = 0;
+let coursesDrawVersion = 0;
+let skCourseSaving = false;
+let skCourseDraft = {training_date:'',location_name:'',participant_count:'',notes:''};
 
 function nav() {
   const state = getAuthState();
@@ -156,9 +159,8 @@ function renderCentralInstructors(rows) {
       '</tr></thead><tbody id="sk-central-list">' + items + '</tbody></table></div>' :
       '<p class="sk-master-empty">Nie ma jeszcze zarejestrowanych instruktorów.</p>') +
     '</section>' +
-    '<div class="sk-central-future"><section class="card"><h2>Szkolenia</h2>' +
-    '<p>Rejestr szkoleń będzie dostępny tutaj po uruchomieniu modułu dodawania kursów.</p></section>' +
-    '<section class="card"><h2>Ośrodki</h2>' +
+    '<div id="sk-central-course-slot"><section class="card sk-course-register"><p>Ładowanie rejestru szkoleń…</p></section></div>' +
+    '<div class="sk-central-future"><section class="card"><h2>Ośrodki</h2>' +
     '<p>W kolejnym etapie dołączymy profile i licencje ośrodków szkoleniowych.</p></section>' +
     '<section class="card"><h2>Certyfikaty</h2>' +
     '<p>Centralny rejestr i kontrolę dokumentów podłączymy do rzeczywistej bazy kursów.</p></section></div>' +
@@ -176,6 +178,18 @@ async function drawCentral(state) {
     if (version !== centralDrawVersion || current !== 'central' || window.SKAuth.getState().isAdmin !== true) return;
     v.innerHTML = head('Centrala SKS', 'Zarządzanie ogólnopolskim systemem instruktorów.') +
       renderCentralInstructors(instructors);
+    try {
+      const courses = await window.SKAuth.listCentralCourses();
+      if (version !== centralDrawVersion || current !== 'central' || window.SKAuth.getState().isAdmin !== true) return;
+      const slot = document.getElementById('sk-central-course-slot');
+      if (slot) slot.innerHTML = renderCentralCourses(courses);
+    } catch (_) {
+      if (version !== centralDrawVersion || current !== 'central' || window.SKAuth.getState().isAdmin !== true) return;
+      const slot = document.getElementById('sk-central-course-slot');
+      if (slot) slot.innerHTML = '<section class="card sk-course-register"><h2>Rejestr szkoleń</h2>' +
+        '<p>Rejestr wymaga jeszcze jednorazowej aktywacji w Supabase.</p>' +
+        '<p><a href="https://github.com/karolhuzarski-maker/stop-krwotokom-system/blob/main/backend/005_training_registry.sql" target="_blank" rel="noopener noreferrer">Otwórz skrypt 005 do uruchomienia w SQL Editor ↗</a></p></section>';
+    }
   } catch (_) {
     if (version !== centralDrawVersion || current !== 'central') return;
     v.innerHTML = head('Centrala SKS', 'Panel administratora systemu.') +
