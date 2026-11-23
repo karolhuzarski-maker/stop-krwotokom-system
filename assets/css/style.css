@@ -602,3 +602,21 @@ body.guest-mode .brand-link{flex-shrink:0;gap:17px}
   .sk-central-future { grid-template-columns: 1fr; }
   .sk-central-heading { align-items: flex-start; }
 }
+
+/* Pulpit instruktora — nawigacja i status niezależne od karty ID. */
+.sk-home-overview{display:grid;grid-template-columns:minmax(0,2fr) minmax(220px,1fr);gap:17px;margin-bottom:27px}
+.sk-home-greeting{padding:28px}.sk-home-greeting h2{font-size:23px;line-height:1.2;margin-bottom:13px}
+.sk-home-greeting p{max-width:540px;font-size:13px}
+.sk-home-status h2{font-size:15px;margin-bottom:16px}.sk-home-validity{margin-top:17px;font-size:13px}
+.sk-home-validity strong{color:#26323a}.sk-home-heading{font-size:17px;margin-bottom:13px}
+.sk-home-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.sk-home-link{display:flex;align-items:center;gap:13px;width:100%;min-height:118px;padding:22px 18px;background:#fff;color:#253039;border:1px solid #e0e4e5;border-radius:13px;text-align:left;font:inherit;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
+.sk-home-link:hover{border-color:#ae4b50;box-shadow:0 7px 17px #26374611;transform:translateY(-1px)}
+.sk-home-link:focus-visible{outline:2px solid #a72e35;outline-offset:2px}
+.sk-home-link-icon{display:inline-flex;justify-content:center;align-items:center;width:29px;color:#a72e35;font-size:23px;flex:none}
+.sk-home-link-copy{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1}
+.sk-home-link-copy strong{font-size:14px;line-height:1.25}
+.sk-home-link-copy small{font-size:12px;line-height:1.45;color:#65737b}
+.sk-home-link-arrow{font-size:24px;color:#a72e35;flex:none}
+@media(max-width:990px){.sk-home-links{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:690px){.sk-home-overview,.sk-home-links{grid-template-columns:1fr}.sk-home-link{min-height:88px}}
