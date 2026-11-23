@@ -495,3 +495,110 @@ body.guest-mode .brand-link{flex-shrink:0;gap:17px}
 .sidebar #nav .nav-item.active:hover {
   filter: brightness(1.06);
 }
+
+/* Centrala SKS: master view w istniejącym portalu, bez zmiany strony publicznej. */
+#nav .sk-central-nav-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .13em;
+  color: #f4d7d4;
+  margin: 22px 9px 8px;
+}
+#nav .sk-central-link {
+  border: 1px solid #ffffff66;
+}
+#nav .sk-central-link:hover {
+  background: #ffffff25;
+}
+.sk-master-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.sk-master-stat {
+  min-width: 0;
+  padding: 20px;
+}
+.sk-master-stat p {
+  font-size: 12px;
+  font-weight: 650;
+  color: #5e6b70;
+}
+.sk-master-stat strong {
+  display: block;
+  font-size: 31px;
+  margin-top: 12px;
+  color: #253039;
+  font-variant-numeric: tabular-nums;
+}
+.sk-central-register {
+  margin-bottom: 18px;
+}
+.sk-central-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.sk-central-heading p {
+  font-size: 12px;
+}
+.sk-central-heading a {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 12px;
+}
+.sk-central-search {
+  margin-bottom: 14px;
+  max-width: 380px;
+}
+.sk-central-search label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.sk-central-search input {
+  display: block;
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #d8dee1;
+  border-radius: 8px;
+  font: inherit;
+}
+.sk-central-search input:focus-visible {
+  outline: 2px solid #a82f35;
+  outline-offset: 1px;
+}
+.sk-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+.sk-table-scroll .table {
+  min-width: 770px;
+}
+.sk-central-future {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+}
+.sk-central-future .card h2 {
+  font-size: 16px;
+}
+.sk-central-future .card p {
+  font-size: 12px;
+}
+.sk-master-empty {
+  padding: 12px 0;
+  font-size: 13px;
+}
+@media (max-width: 1000px) {
+  .sk-master-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+  .sk-central-future { grid-template-columns: 1fr; }
+  .sk-central-heading { align-items: flex-start; }
+}
