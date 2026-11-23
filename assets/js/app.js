@@ -277,7 +277,7 @@ async function openSKMaterial(fileName) {
 
 
 /* Indywidualna legitymacja: dane wyłącznie z uwierzytelnionego profilu Supabase.
-   A5 jednostronne; brak fikcyjnych QR, podpisów, zdjęć i dat wydania. */
+   A6 jednostronne; brak fikcyjnych QR, podpisów, zdjęć i dat wydania. */
 function renderInstructorCredential(state) {
   const profile = state.profile || {};
   const active = state.mode === 'active';
@@ -288,7 +288,7 @@ function renderInstructorCredential(state) {
   const nameLen = String(profile.display_name || '').trim().length;
   return '<article id="sk-instructor-id" class="sk-id-paper ' +
     (active ? 'sk-id-active' : 'sk-id-inactive') +
-    '" aria-label="Legitymacja instruktora STOP KRWOTOKOM SYSTEM, format A5">' +
+    '" aria-label="Legitymacja instruktora STOP KRWOTOKOM SYSTEM, format A6">' +
     '<img class="sk-id-artwork" src="assets/images/sks-credential-premium-frame.svg" alt="" aria-hidden="true">' +
     '<div class="sk-id-sks-logo"><img src="assets/images/logo-stop-krwotokom-system-prosty.webp" alt="STOP KRWOTOKOM SYSTEM"></div>' +
     '<div class="sk-id-hcore-logo">' +
@@ -339,7 +339,7 @@ async function printInstructorCredential() {
     modal('Legitymacja instruktora', '<p>' + mk(error && error.message || 'Nie udało się przygotować legitymacji.') + '</p>');
   } finally {
     const currentButton = document.getElementById('sk-id-print-button');
-    if (currentButton) { currentButton.disabled = false; currentButton.textContent = 'Zapisz jako PDF / drukuj A5'; }
+    if (currentButton) { currentButton.disabled = false; currentButton.textContent = 'Zapisz jako PDF / drukuj A6'; }
   }
 }
 
@@ -400,11 +400,11 @@ function drawConnectedPortal() {
     const printing = active && hasData;
     const actions =
       '<section class="card sk-id-action-card"><div class="eyebrow">TWOJA LEGITYMACJA</div>' +
-      '<h2>Legitymacja instruktora A5</h2>' +
+      '<h2>Legitymacja instruktora A6</h2>' +
       '<p>Dane z Twojego konta w STOP KRWOTOKOM SYSTEM. Numer, nazwisko, status i data ważności aktualizują się automatycznie po zmianie w Supabase.</p>' +
       '<button id="sk-id-print-button" type="button" class="button sk-id-print" ' +
       (printing ? '' : 'disabled ') +
-      'onclick="printInstructorCredential()">Zapisz jako PDF / drukuj A5</button>' +
+      'onclick="printInstructorCredential()">Zapisz jako PDF / drukuj A6</button>' +
       '<p class="subtle sk-id-availability">' +
       (printing
         ? 'Przed wydrukiem sprawdzimy ponownie aktualny status konta. W oknie drukowania wybierz „Zapisz jako PDF”.'
