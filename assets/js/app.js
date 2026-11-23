@@ -28,6 +28,9 @@ let materialsDrawVersion = 0;
 let coursesDrawVersion = 0;
 let skCourseSaving = false;
 let skCourseDraft = {training_date:'',location_name:'',participant_count:'',notes:''};
+let skCourseRows = [];
+let skCourseEditingId = null;
+let skCourseMutationBusy = false;
 
 function nav() {
   const state = getAuthState();
@@ -285,23 +288,110 @@ async function saveSKCourse(event) {
     if (buttonNow) { buttonNow.disabled = false; buttonNow.textContent = 'Zapisz szkolenie'; }
   }
 }
+function renderSKCourseEdit(row) {
+  const field = (name, label, type, more) =>
+    '<label class="sk-course-field" for="sk-edit-' + name + '"><span>' + label + '</span>' +
+    '<input id="sk-edit-' + name + '" type="' + type + '" value="' + mk(row[name] ?? '') + '" ' + more + '></label>';
+  return '<form class="sk-course-inline-edit" id="sk-course-edit-form" onsubmit="saveSKCourseEdit(event)">' +
+    '<h3>Edytuj szkolenie</h3><div class="sk-course-form-grid">' +
+    field('training_date','Data szkolenia','date','required') +
+    field('location_name','Miejsce','text','required minlength="2" maxlength="140"') +
+    field('participant_count','Liczba osób','number','required min="1" max="1000" step="1" inputmode="numeric"') +
+    '</div><label class="sk-course-field sk-course-notes" for="sk-edit-notes">' +
+    '<span>Uwagi <small>(opcjonalnie)</small></span>' +
+    '<textarea id="sk-edit-notes" rows="2" maxlength="1000">' + mk(row.notes || '') + '</textarea></label>' +
+    '<div class="sk-course-form-bottom">' +
+    '<button type="submit" id="sk-course-edit-save" class="button sk-course-submit">Zapisz zmiany</button>' +
+    '<button type="button" class="sk-course-action" onclick="cancelSKCourseEdit()">Anuluj</button>' +
+    '<p id="sk-course-edit-status" role="status" aria-live="polite"></p>' +
+    '</div></form>';
+}
 function renderMyCourses(rows) {
   const totalPeople = rows.reduce((sum,row) => sum + (Number(row.participant_count) || 0),0);
   const items = rows.map(row =>
     '<div class="sk-my-course-item"><div class="sk-my-course-date">' + skCourseDate(row.training_date) + '</div>' +
     '<div class="sk-my-course-place"><strong>' + mk(row.location_name) + '</strong>' +
       (row.notes ? '<p>' + mk(row.notes) + '</p>' : '') + '</div>' +
-    '<div class="sk-my-course-people"><strong>' + mk(row.participant_count) + '</strong> osób</div></div>'
+    '<div class="sk-my-course-people"><strong>' + mk(row.participant_count) + '</strong> osób</div>' +
+    '<div class="sk-my-course-actions">' +
+    '<button type="button" class="sk-course-action" data-id="' + mk(row.id) +
+      '" onclick="beginSKCourseEdit(this.dataset.id)">Edytuj</button>' +
+    '<button type="button" class="sk-course-action sk-course-delete" data-id="' + mk(row.id) +
+      '" onclick="deleteSKCourse(this.dataset.id)">Usuń</button></div>' +
+    (skCourseEditingId === row.id ? renderSKCourseEdit(row) : '') + '</div>'
   ).join('');
   return '<div class="sk-my-course-summary"><span><b>' + rows.length + '</b> szkoleń</span>' +
     '<span><b>' + totalPeople + '</b> uczestników łącznie</span></div>' +
     '<section class="card sk-my-course-card">' +
-    (rows.length
-      ? '<div class="sk-my-course-list">' + items + '</div>'
-      : '<div class="sk-course-empty"><h2>Nie masz jeszcze zapisanych szkoleń</h2>' +
-        '<p>Dodaj pierwsze szkolenie — wystarczą data, miejsce i liczba osób.</p>' +
-        '<button type="button" class="button" data-tab="addCourse" onclick="go(this.dataset.tab)">Dodaj szkolenie</button></div>') +
+    (rows.length ? '<div class="sk-my-course-list">' + items + '</div>' :
+      '<div class="sk-course-empty"><h2>Nie masz jeszcze zapisanych szkoleń</h2>' +
+      '<p>Dodaj pierwsze szkolenie — wystarczą data, miejsce i liczba osób.</p>' +
+      '<button type="button" class="button" data-tab="addCourse" onclick="go(this.dataset.tab)">Dodaj szkolenie</button></div>') +
     '</section>';
+}
+function rerenderSKCourseList() {
+  const content = document.getElementById('sk-my-courses-content');
+  if (current === 'courses' && content) content.innerHTML = renderMyCourses(skCourseRows);
+}
+function beginSKCourseEdit(id) {
+  if (skCourseMutationBusy || window.SKAuth.getState().mode !== 'active') return;
+  if (!skCourseRows.some(row => row.id === id)) return;
+  skCourseEditingId = id;
+  rerenderSKCourseList();
+  document.getElementById('sk-course-edit-form')?.scrollIntoView({block:'nearest'});
+}
+function cancelSKCourseEdit() {
+  if (skCourseMutationBusy) return;
+  skCourseEditingId = null;
+  rerenderSKCourseList();
+}
+async function saveSKCourseEdit(event) {
+  if (event && typeof event.preventDefault === 'function') event.preventDefault();
+  if (skCourseMutationBusy || !skCourseEditingId || current !== 'courses') return;
+  const input = name => document.getElementById('sk-edit-' + name)?.value || '';
+  const data = {
+    training_date:input('training_date'), location_name:input('location_name'),
+    participant_count:input('participant_count'), notes:input('notes')
+  };
+  const id = skCourseEditingId;
+  const button = document.getElementById('sk-course-edit-save');
+  const status = document.getElementById('sk-course-edit-status');
+  if (!button || !status) return;
+  skCourseMutationBusy = true;
+  button.disabled = true;
+  button.textContent = 'Zapisywanie…';
+  status.textContent = '';
+  try {
+    await window.SKAuth.updateInstructorCourse(id,data);
+    skCourseEditingId = null;
+    drawMyCourses();
+  } catch (error) {
+    if (current === 'courses' && document.getElementById('sk-course-edit-status'))
+      document.getElementById('sk-course-edit-status').textContent =
+        error && error.message || 'Nie udało się zapisać zmian.';
+  } finally {
+    skCourseMutationBusy = false;
+    const newButton = document.getElementById('sk-course-edit-save');
+    if (newButton) { newButton.disabled = false; newButton.textContent = 'Zapisz zmiany'; }
+  }
+}
+async function deleteSKCourse(id) {
+  if (skCourseMutationBusy || window.SKAuth.getState().mode !== 'active') return;
+  const row = skCourseRows.find(item => item.id === id);
+  if (!row || current !== 'courses') return;
+  if (!window.confirm('Usunąć szkolenie: ' + row.location_name + ' (' +
+      skCourseDate(row.training_date) + ')?\nTej operacji nie można cofnąć.')) return;
+  skCourseMutationBusy = true;
+  try {
+    await window.SKAuth.deleteInstructorCourse(id);
+    if (skCourseEditingId === id) skCourseEditingId = null;
+    drawMyCourses();
+  } catch (error) {
+    modal('Nie udało się usunąć szkolenia',
+      '<p>' + mk(error && error.message || 'Spróbuj ponownie później.') + '</p>');
+  } finally {
+    skCourseMutationBusy = false;
+  }
 }
 async function drawMyCourses() {
   const version = ++coursesDrawVersion;
@@ -313,10 +403,12 @@ async function drawMyCourses() {
     const rows = await window.SKAuth.listMyCourses();
     if (version !== coursesDrawVersion || current !== 'courses' ||
         window.SKAuth.getState().mode !== 'active') return;
+    skCourseRows = rows;
     view.innerHTML = head('Moje szkolenia', 'Twoje szkolenia zapisane w systemie SKS.', action) +
-      renderMyCourses(rows);
+      '<div id="sk-my-courses-content">' + renderMyCourses(rows) + '</div>';
   } catch (_) {
     if (version !== coursesDrawVersion || current !== 'courses') return;
+    skCourseRows = [];
     view.innerHTML = head('Moje szkolenia', 'Twój rejestr prowadzonych szkoleń.') +
       '<section class="card sk-course-form-card"><h2>Rejestr jeszcze niedostępny</h2>' +
       '<p>Rejestr wymaga jednorazowej aktywacji w Supabase. Skontaktuj się z Centralą SKS.</p>' +
@@ -648,6 +740,8 @@ function authPrompt() {
 async function logoutAccount() {
   try { await window.SKAuth.signOut(); }
   catch (error) { modal('Wylogowanie', '<p>' + mk(error.message) + '</p>'); return; }
+  skCourseRows = [];
+  skCourseEditingId = null;
   go('home');
 }
 function openCentresWindow() { window.open('./#osrodki', '_blank', 'noopener'); }
