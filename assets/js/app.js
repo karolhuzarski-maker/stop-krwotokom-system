@@ -221,7 +221,10 @@ function drawConnectedPortal() {
       '<p>Numer SKS-I jest stały. O zakresie i ważności autoryzacji decyduje organizator.</p>' +
       '<a class="button secondary" style="display:inline-block;margin-top:18px" href="mailto:stop@h-core.edu.pl">Kontakt z organizatorem</a></section></div>';
     const notice = current === 'profile' ?
-      '<p class="subtle" style="margin-top:20px">Licencja PDF i identyfikator do pobrania zostaną udostępnione w tej sekcji po uruchomieniu dokumentów.</p>' :
+      '<section class="card" style="margin-top:18px"><h2>Dokumenty systemowe</h2><p>Dokumenty możesz otworzyć, pobrać lub zapisać jako PDF.</p>' +
+      '<div class="inline-actions" style="margin-top:16px;gap:10px"><a class="button secondary" href="regulamin-portalu.html">Regulamin portalu ↗</a>' +
+      '<a class="button secondary" href="polityka-prywatnosci.html">Polityka prywatności (RODO) ↗</a></div></section>' +
+      '<p class="subtle" style="margin-top:18px">Licencja instruktorska PDF i identyfikator do pobrania zostaną udostępnione po uruchomieniu modułu dokumentów.</p>' :
       '<p class="subtle" style="margin-top:20px">Ewidencja szkoleń, certyfikaty i biblioteka materiałów będą uruchamiane etapami.</p>';
     v.innerHTML = head(current === 'profile' ? 'Mój profil i ID' : 'Pulpit instruktora',
       current === 'profile' ? 'Twoje dane i status autoryzacji.' : 'Twoje konto instruktorskie.') + profileCard + notice;
