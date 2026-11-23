@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="assets/css/account.css?v=20261110-dostep"/>
 <script defer src="assets/js/portal-config.js?v=20261123-portal"></script>
 <script defer src="assets/js/portal-auth.js?v=20261123-portal"></script>
-<script defer src="assets/js/account.js?v=20261123-portal"></script>
+<script defer src="assets/js/account.js?v=20261123-invitefix"></script>
 </head>
 <body class="account-page">
 <main class="account-card">
@@ -31,6 +31,7 @@
 </form>
 <div id="account-connected" hidden>
 <p>Zalogowany adres: <strong id="account-email"></strong></p>
+<button id="open-password-form" class="account-text-button" type="button" hidden>Ustaw lub zmień hasło</button>
 <form id="password-form" hidden>
 <label for="account-new-password">Ustaw hasło — co najmniej 12 znaków</label>
 <input id="account-new-password" type="password" minlength="12" autocomplete="new-password" required/>
