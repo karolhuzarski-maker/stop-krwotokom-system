@@ -279,39 +279,40 @@ async function openSKMaterial(fileName) {
 /* Indywidualna legitymacja: dane wyłącznie z uwierzytelnionego profilu Supabase.
    A5 jednostronne; brak fikcyjnych QR, podpisów, zdjęć i dat wydania. */
 function renderInstructorCredential(state) {
-  const p = state.profile || {};
-  const isActive = state.mode === 'active';
-  const name = mk(p.display_name || 'Dane instruktora nieuzupełnione');
-  const instructorNumber = mk(p.instructor_id || 'Numer nie został nadany');
-  const validUntil = p.valid_until ? mk(dateFormat(p.valid_until)) : 'Nie ustalono';
-  const statusLabel = isActive ? 'AKTYWNA' : 'NIEAKTYWNA';
-  return '<article class="sk-id-paper ' + (isActive ? 'sk-id-active' : 'sk-id-inactive') +
-    '" id="sk-instructor-id" aria-label="Legitymacja instruktora STOP KRWOTOKOM SYSTEM">' +
-    '<div class="sk-id-masthead">' +
-    '<div class="sk-id-brand-sks"><img src="assets/images/logo-stop-krwotokom-system-prosty.webp" alt="STOP KRWOTOKOM SYSTEM"></div>' +
-    '<span class="sk-id-brand-rule" aria-hidden="true"></span>' +
-    '<img class="sk-id-brand-hcore" src="assets/images/h-core-edu-mark.svg" alt="H-CORE EDU">' +
+  const profile = state.profile || {};
+  const active = state.mode === 'active';
+  const fullName = mk(profile.display_name || 'Nieuzupełnione dane');
+  const instructorId = mk(profile.instructor_id || 'Numer do nadania');
+  const expiry = profile.valid_until ? mk(dateFormat(profile.valid_until)) : 'Nie ustalono';
+  const status = active ? 'AKTYWNA' : 'NIEAKTYWNA';
+  const nameLen = String(profile.display_name || '').trim().length;
+  return '<article id="sk-instructor-id" class="sk-id-paper ' +
+    (active ? 'sk-id-active' : 'sk-id-inactive') +
+    '" aria-label="Legitymacja instruktora STOP KRWOTOKOM SYSTEM, format A5">' +
+    '<img class="sk-id-artwork" src="assets/images/sks-credential-premium-frame.svg" alt="" aria-hidden="true">' +
+    '<div class="sk-id-sks-logo"><img src="assets/images/logo-stop-krwotokom-system-prosty.webp" alt="STOP KRWOTOKOM SYSTEM"></div>' +
+    '<div class="sk-id-hcore-logo">' +
+      '<div class="sk-id-hcore-symbol"><img src="assets/images/h-core-edu-mark.svg" alt=""></div>' +
+      '<strong>H-CORE <em>EDU</em></strong>' +
+      '<small>CIVIL ORDER RESPONSE EMERGENCY</small>' +
     '</div>' +
-    '<div class="sk-id-banner"><span>POLSKI SYSTEM KONTROLI KRWOTOKÓW</span>' +
-    '<strong>LEGITYMACJA<br>INSTRUKTORA</strong></div>' +
-    '<div class="sk-id-main">' +
-    '<div class="sk-id-watermark" aria-hidden="true">SKS</div>' +
-    '<div class="sk-id-main-kicker">AUTORYZACJA INSTRUKTORSKA</div>' +
-    '<div class="sk-id-person"><span>IMIĘ I NAZWISKO</span><strong>' + name + '</strong></div>' +
-    '<div class="sk-id-number"><span>NUMER INSTRUKTORA</span><strong>' + instructorNumber + '</strong></div>' +
-    '<div class="sk-id-details">' +
-      '<div><span>WAŻNA DO</span><strong>' + validUntil + '</strong></div>' +
-      '<div><span>STATUS AUTORYZACJI</span><strong class="sk-id-status">' + statusLabel + '</strong></div>' +
-    '</div>' +
-    '<div class="sk-id-endorsement"><span class="sk-id-endorsement-mark" aria-hidden="true">✦</span>' +
-    '<div><b>STOP KRWOTOKOM SYSTEM</b><small>Autoryzowany program szkoleniowy H-CORE EDU</small></div></div>' +
-    '</div>' +
-    '<footer class="sk-id-footer"><div><strong>H-CORE EDU</strong><span>Organizator programu</span></div>' +
-    '<p>Dokument potwierdza status autoryzacji w chwili jego wygenerowania.<br>' +
-    'Aktualność uprawnień potwierdza organizator.</p>' +
-    '<b>stopkrwotokom-system.pl</b></footer>' +
+    '<div class="sk-id-tagline">POLSKI SYSTEM KONTROLI KRWOTOKÓW</div>' +
+    '<h2 class="sk-id-heading">LEGITYMACJA<br>INSTRUKTORA</h2>' +
+    '<div class="sk-id-field sk-id-field-name"><span>INSTRUKTOR</span>' +
+      '<strong class="' + (nameLen > 27 ? 'sk-id-name-very-long' : nameLen > 19 ? 'sk-id-name-long' : '') +
+      '">' + fullName + '</strong></div>' +
+    '<div class="sk-id-field sk-id-field-number"><span>NUMER INSTRUKTORA</span>' +
+      '<strong>' + instructorId + '</strong></div>' +
+    '<div class="sk-id-field sk-id-field-expiry"><span>WAŻNOŚĆ LEGITYMACJI</span>' +
+      '<strong>' + expiry + '</strong></div>' +
+    '<div class="sk-id-field sk-id-field-status"><span>STATUS</span>' +
+      '<strong class="sk-id-status-pill">' + status + '</strong></div>' +
+    '<div class="sk-id-organizer"><span>ORGANIZATOR:</span>' +
+      '<strong>H-CORE <em>EDU</em></strong></div>' +
+    '<div class="sk-id-web">stopkrwotokom-system.pl</div>' +
     '</article>';
 }
+
 async function printInstructorCredential() {
   const button = document.getElementById('sk-id-print-button');
   if (button) { button.disabled = true; button.textContent = 'Sprawdzanie danych…'; }
