@@ -155,8 +155,9 @@
     const location = String(input && input.location_name || '').trim();
     const count = Number(input && input.participant_count);
     const notes = String(input && input.notes || '').trim();
-    if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(date) ||
-        !/^\\d{4}-\\d{2}-\\d{2}$/.test(date)) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+        !Number.isFinite(Date.parse(date + 'T12:00:00Z')) ||
+        new Date(date + 'T12:00:00Z').toISOString().slice(0, 10) !== date) {
       throw new Error('Wybierz poprawną datę szkolenia.');
     }
     if (location.length < 2 || location.length > 140) {
