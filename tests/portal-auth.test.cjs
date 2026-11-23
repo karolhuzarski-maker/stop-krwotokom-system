@@ -11,6 +11,9 @@ function harness(options = {}) {
   const query = {
     select(columns) { calls.push(['select', columns]); return this; },
     eq(column, value) { calls.push(['eq', column, value]); return this; },
+    order(column, config) { calls.push(['order', column, config]); return this; },
+    async limit(count) { calls.push(['limit', count]); return options.courseList || { data: [], error: null }; },
+    async insert(payload) { calls.push(['insert', payload]); return options.courseInsert || { data: null, error: null }; },
     async maybeSingle() { return options.profileResult || { data: profile, error: null }; }
   };
   const client = {
@@ -47,6 +50,7 @@ function harness(options = {}) {
       if (name === 'portal_has_access') return options.permission || { data: true, error: null };
       if (name === 'portal_is_admin') return options.centralPermission || { data: false, error: null };
       if (name === 'portal_admin_list_instructors') return options.centralList || { data: [], error: null };
+      if (name === 'portal_admin_list_courses') return options.courseCentralList || { data: [], error: null };
       throw new Error('Unexpected RPC: ' + name);
     }
   };
@@ -254,4 +258,76 @@ test('private material API errors cannot show fictitious available documents', a
   const { auth } = harness({ materialList: { data: null, error: new Error('Storage is offline') } });
   await auth.init();
   await assert.rejects(auth.listInstructorMaterials(), /Nie udało się pobrać/);
+});
+
+test('instructor inserts only date, location, number and optional notes without selecting owner', async () => {
+  const { auth, calls } = harness();
+  await auth.init();
+  await auth.addInstructorCourse({training_date:'2026-12-16',location_name:'  Kraków  ',
+    participant_count:14,notes:'  dla OSP  ',instructor_user_id:'another-user'});
+  const call = calls.find(c => c[0] === 'insert');
+  assert.ok(call);
+  assert.deepEqual(call[1], { training_date:'2026-12-16', location_name:'Kraków',
+    participant_count:14, notes:'dla OSP' });
+  assert.ok(calls.some(c => c[0] === 'from' && c[1] === 'sk_courses'));
+});
+
+test('revoked instructor cannot create a course record even as Central SKS admin', async () => {
+  const { auth, calls } = harness({
+    permission:{ data:false,error:null },
+    centralPermission:{ data:true,error:null }
+  });
+  await auth.init();
+  await assert.rejects(auth.addInstructorCourse({training_date:'2026-12-16',
+    location_name:'Kraków',participant_count:5}),/aktywnej autoryzacji/);
+  assert.equal(calls.some(c => c[0] === 'insert'), false);
+});
+
+test('invalid course data are rejected locally', async () => {
+  const { auth, calls } = harness();
+  await auth.init();
+  const base = {training_date:'2026-12-16',location_name:'Kraków',participant_count:12,notes:''};
+  for (const payload of [
+    {...base,training_date:'2026-02-31'},
+    {...base,training_date:'invalid'},
+    {...base,location_name:' '},
+    {...base,participant_count:0},
+    {...base,participant_count:1001},
+    {...base,participant_count:1.1},
+    {...base,notes:'x'.repeat(1001)}
+  ]) await assert.rejects(auth.addInstructorCourse(payload));
+  assert.equal(calls.some(c => c[0] === 'insert'), false);
+});
+
+test('personal course listing filters by verified session user even for Central SKS admin', async () => {
+  const rows = [{id:'abc',training_date:'2026-12-16',location_name:'Kraków',
+    participant_count:12,notes:''}];
+  const { auth, calls } = harness({centralPermission:{data:true,error:null},
+    courseList:{data:rows,error:null}});
+  await auth.init();
+  assert.deepEqual(await auth.listMyCourses(), rows);
+  assert.ok(calls.some(c => c[0] === 'eq' && c[1] === 'instructor_user_id' && c[2] === 'user-a'));
+  assert.ok(calls.some(c => c[0] === 'limit' && c[1] === 200));
+});
+
+test('only Central SKS admin can load the complete course register', async () => {
+  const ordinary = harness();
+  await ordinary.auth.init();
+  await assert.rejects(ordinary.auth.listCentralCourses(),/Brak uprawnień/);
+  assert.equal(ordinary.calls.some(c => c[0] === 'rpc' && c[1] === 'portal_admin_list_courses'), false);
+  const data = [{instructor_id:'SKS-I-2026-001',display_name:'Test',participant_count:12}];
+  const admin = harness({centralPermission:{data:true,error:null},
+    courseCentralList:{data,error:null}});
+  await admin.auth.init();
+  assert.deepEqual(await admin.auth.listCentralCourses(), data);
+  assert.ok(admin.calls.some(c => c[0] === 'rpc' && c[1] === 'portal_admin_list_courses'));
+});
+
+test('failed course queries do not invent saved records', async () => {
+  const { auth } = harness({courseList:{data:null,error:new Error('offline')},
+    courseInsert:{data:null,error:new Error('offline')}});
+  await auth.init();
+  await assert.rejects(auth.listMyCourses(),/Nie udało się pobrać/);
+  await assert.rejects(auth.addInstructorCourse({training_date:'2026-12-16',
+    location_name:'Kraków',participant_count:12}),/Nie udało się zapisać/);
 });
