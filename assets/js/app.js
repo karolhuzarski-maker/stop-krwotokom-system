@@ -337,7 +337,7 @@ async function printInstructorCredential() {
     // Chrome proposes the current page title as the PDF filename.
     // Use only the live, authenticated instructor name (not a hardcoded example).
     const safeName = String(state.profile.display_name).normalize('NFD')
-      .replace(/[\\u0300-\\u036f]/g, '').replace(/ł/g, 'l').replace(/Ł/g, 'L')
+      .replace(/\p{M}/gu, '').replace(/ł/g, 'l').replace(/Ł/g, 'L')
       .replace(/[^A-Za-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 80);
     const previousTitle = document.title;
     const onAfterPrint = () => { document.title = previousTitle; };
