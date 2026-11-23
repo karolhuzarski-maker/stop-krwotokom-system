@@ -147,6 +147,60 @@
     }
     return files.map(file => file.name);
   }
+
+  // Zapis szkoleń: bazowa tabela ma RLS; klient nigdy nie przyjmuje właściciela z formularza.
+  async function addInstructorCourse(input) {
+    if (state.mode !== 'active') throw new Error('Dodawanie szkoleń wymaga aktywnej autoryzacji.');
+    const date = String(input && input.training_date || '').trim();
+    const location = String(input && input.location_name || '').trim();
+    const count = Number(input && input.participant_count);
+    const notes = String(input && input.notes || '').trim();
+    if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(date) ||
+        !/^\\d{4}-\\d{2}-\\d{2}$/.test(date)) {
+      throw new Error('Wybierz poprawną datę szkolenia.');
+    }
+    if (location.length < 2 || location.length > 140) {
+      throw new Error('Miejsce szkolenia musi mieć od 2 do 140 znaków.');
+    }
+    if (!Number.isInteger(count) || count < 1 || count > 1000) {
+      throw new Error('Podaj liczbę uczestników od 1 do 1000.');
+    }
+    if (notes.length > 1000) throw new Error('Uwagi mogą mieć maksymalnie 1000 znaków.');
+    const api = await requireClient();
+    const { error } = await api.from('sk_courses').insert({
+      training_date: date, location_name: location, participant_count: count, notes
+    });
+    if (error) {
+      if (error.code === '42P01' || error.code === 'PGRST205') {
+        throw new Error('Rejestr szkoleń wymaga jednorazowej aktywacji w Supabase.');
+      }
+      throw new Error('Nie udało się zapisać szkolenia. Spróbuj ponownie lub skontaktuj się z Centralą SKS.');
+    }
+    return true;
+  }
+  async function listMyCourses() {
+    if (state.mode !== 'active') throw new Error('Wymagana aktywna autoryzacja instruktora.');
+    const api = await requireClient();
+    const authResult = await api.auth.getUser();
+    if (authResult.error || !authResult.data || !authResult.data.user) {
+      throw new Error('Sesja wygasła. Zaloguj się ponownie.');
+    }
+    const { data, error } = await api.from('sk_courses')
+      .select('id,training_date,location_name,participant_count,notes,created_at')
+      .eq('instructor_user_id', authResult.data.user.id)
+      .order('training_date', { ascending: false })
+      .order('created_at', { ascending: false })
+      .limit(200);
+    if (error || !Array.isArray(data)) throw new Error('Nie udało się pobrać Twoich szkoleń.');
+    return data;
+  }
+  async function listCentralCourses() {
+    if (state.isAdmin !== true) throw new Error('Brak uprawnień Centrali SKS.');
+    const api = await requireClient();
+    const { data, error } = await api.rpc('portal_admin_list_courses');
+    if (error || !Array.isArray(data)) throw new Error('Nie udało się pobrać centralnego rejestru szkoleń.');
+    return data;
+  }
   async function setPassword(password) {
     if (typeof password !== 'string' || password.length < 12) throw new Error('Hasło musi mieć co najmniej 12 znaków.');
     const api = await requireClient();
@@ -176,6 +230,7 @@
   return Object.freeze({
     isConfigured: () => configured, needsCaptcha: () => Boolean(config.turnstileSiteKey),
     getState: snapshot, init, refresh, signIn, signOut, setPassword, resetPassword, mountCaptcha, listCentralInstructors,
-    listInstructorMaterials, getInstructorMaterialUrl, uploadInstructorMaterials
+    listInstructorMaterials, getInstructorMaterialUrl, uploadInstructorMaterials,
+    addInstructorCourse, listMyCourses, listCentralCourses
   });
 });
