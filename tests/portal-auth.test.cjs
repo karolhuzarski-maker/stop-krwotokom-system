@@ -8,13 +8,25 @@ function harness(options = {}) {
   const user = { id: 'user-a', email: 'instructor@example.test' };
   const profile = { instructor_id: 'SKS-I-2026-001', display_name: 'Test', enabled: true, valid_until: '2027-12-31' };
   let currentUser = options.guest ? null : user;
+  let courseMutation = null;
   const query = {
     select(columns) { calls.push(['select', columns]); return this; },
     eq(column, value) { calls.push(['eq', column, value]); return this; },
     order(column, config) { calls.push(['order', column, config]); return this; },
     async limit(count) { calls.push(['limit', count]); return options.courseList || { data: [], error: null }; },
     async insert(payload) { calls.push(['insert', payload]); return options.courseInsert || { data: null, error: null }; },
-    async maybeSingle() { return options.profileResult || { data: profile, error: null }; }
+    update(payload) { calls.push(['update', payload]); courseMutation = 'update'; return this; },
+    delete() { calls.push(['delete']); courseMutation = 'delete'; return this; },
+    async maybeSingle() {
+      if (courseMutation) {
+        const operation = courseMutation;
+        courseMutation = null;
+        return operation === 'update'
+          ? options.courseUpdate || { data: { id: 'some-id' }, error: null }
+          : options.courseDelete || { data: { id: 'some-id' }, error: null };
+      }
+      return options.profileResult || { data: profile, error: null };
+    }
   };
   const client = {
     storage: {
@@ -330,4 +342,77 @@ test('failed course queries do not invent saved records', async () => {
   await assert.rejects(auth.listMyCourses(),/Nie udało się pobrać/);
   await assert.rejects(auth.addInstructorCourse({training_date:'2026-12-16',
     location_name:'Kraków',participant_count:12}),/Nie udało się zapisać/);
+});
+
+test('instructor may update only own identified course and four editable fields', async () => {
+  const id = '3a021c91-3541-4f6f-9b7f-16934d6f5d09';
+  const { auth, calls } = harness();
+  await auth.init();
+  await auth.updateInstructorCourse(id, {
+    training_date: '2026-11-23', location_name: '  Kraków  ',
+    participant_count: 18, notes: '  zmiana liczby  ', instructor_user_id: 'hacker'
+  });
+  assert.deepEqual(calls.find(c => c[0] === 'update'), ['update', {
+    training_date: '2026-11-23', location_name: 'Kraków',
+    participant_count: 18, notes: 'zmiana liczby'
+  }]);
+  assert.ok(calls.some(c => c[0] === 'eq' && c[1] === 'id' && c[2] === id));
+  assert.ok(calls.some(c => c[0] === 'eq' && c[1] === 'instructor_user_id' && c[2] === 'user-a'));
+  assert.ok(calls.some(c => c[0] === 'select' && c[1] === 'id'));
+});
+
+test('instructor can delete only own course with explicit id and verified account', async () => {
+  const id = '4f24321b-accb-4dfe-bf5a-1fdfc1a6f49e';
+  const { auth, calls } = harness();
+  await auth.init();
+  assert.equal(await auth.deleteInstructorCourse(id), true);
+  assert.ok(calls.some(c => c[0] === 'delete'));
+  assert.ok(calls.some(c => c[0] === 'eq' && c[1] === 'id' && c[2] === id));
+  assert.ok(calls.some(c => c[0] === 'eq' && c[1] === 'instructor_user_id' && c[2] === 'user-a'));
+});
+
+test('invalid edit and delete ids cannot reach Supabase mutations', async () => {
+  const { auth, calls } = harness();
+  await auth.init();
+  for (const id of ['invalid', '../id', '', '1']) {
+    await assert.rejects(auth.updateInstructorCourse(id, {training_date:'2026-11-23',location_name:'Kraków',participant_count:1}), /identyfikator/);
+    await assert.rejects(auth.deleteInstructorCourse(id), /identyfikator/);
+  }
+  assert.equal(calls.some(c => c[0] === 'update' || c[0] === 'delete'), false);
+});
+
+test('blocked accounts cannot edit or delete even if admin role is set', async () => {
+  const { auth, calls } = harness({
+    permission: {data:false,error:null},
+    centralPermission: {data:true,error:null}
+  });
+  await auth.init();
+  const id = '3a021c91-3541-4f6f-9b7f-16934d6f5d09';
+  await assert.rejects(auth.updateInstructorCourse(id, {training_date:'2026-11-23',location_name:'Kraków',participant_count:1}), /aktywnej autoryzacji/);
+  await assert.rejects(auth.deleteInstructorCourse(id), /aktywnej autoryzacji/);
+  assert.equal(calls.some(c => c[0] === 'update' || c[0] === 'delete'), false);
+});
+
+test('no affected row or RLS error never reports successful update or deletion', async () => {
+  const id = '3a021c91-3541-4f6f-9b7f-16934d6f5d09';
+  const denied = harness({
+    courseUpdate:{data:null,error:null},
+    courseDelete:{data:null,error:null}
+  });
+  await denied.auth.init();
+  await assert.rejects(denied.auth.updateInstructorCourse(id, {training_date:'2026-11-23',location_name:'Kraków',participant_count:1}), /Nie znaleziono/);
+  await assert.rejects(denied.auth.deleteInstructorCourse(id), /Nie znaleziono/);
+  const errors = harness({courseUpdate:{data:null,error:new Error('RLS')}});
+  await errors.auth.init();
+  await assert.rejects(errors.auth.updateInstructorCourse(id, {training_date:'2026-11-23',location_name:'Kraków',participant_count:1}), /Nie udało się zapisać zmian/);
+});
+
+test('course modifications are rejected if auth user session no longer verifies', async () => {
+  const id = '3a021c91-3541-4f6f-9b7f-16934d6f5d09';
+  const { auth, calls } = harness({getUser: async () => ({ data: {user:null},error:null })});
+  await auth.init();
+  // An authenticated user is necessary for mode=active; test session loss after init.
+  // Here init will become guest, and mutations must not be issued.
+  await assert.rejects(auth.deleteInstructorCourse(id));
+  assert.equal(calls.some(c => c[0] === 'delete'), false);
 });
