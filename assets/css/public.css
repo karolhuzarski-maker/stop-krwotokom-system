@@ -758,3 +758,14 @@ body.guest-mode #visitor .sk-inst-watermark {
 @media (max-width: 900px) {
   body.guest-mode #visitor .sk-inst-watermark { opacity: .16; }
 }
+
+/* Dyskretny podpis autora w lewej kolumnie stopki */
+#visitor .sk-footer-author { margin-top: 20px; max-width: 350px; }
+#visitor .sk-footer-author > span { display: block; color: #b7b9b9; font-size: 11px; line-height: 1.5; }
+#visitor .sk-footer-author details { margin-top: 3px; }
+#visitor .sk-footer-author summary { display: inline-block; cursor: pointer; list-style: none; color: #fff; font-size: 13px; font-weight: 650; line-height: 1.6; text-decoration: underline; text-decoration-color: #929798; text-underline-offset: 3px; }
+#visitor .sk-footer-author summary::-webkit-details-marker { display: none; }
+#visitor .sk-footer-author summary::after { content: " +"; color: #c8cbcc; text-decoration: none; }
+#visitor .sk-footer-author details[open] summary::after { content: " −"; }
+#visitor .sk-footer-author summary:hover, #visitor .sk-footer-author summary:focus-visible { color: #fff; text-decoration-color: #fff; }
+#visitor .sk-footer-author details p { margin: 9px 0 0; max-width: 350px; color: #d0d1d1; font-size: 11px; line-height: 1.7; }
