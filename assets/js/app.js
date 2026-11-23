@@ -200,6 +200,132 @@ async function drawCentral(state) {
 }
 
 
+
+/* Rejestr szkoleń — tylko 4 pola w formularzu i bez danych uczestników. */
+function skCourseDate(value) {
+  return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)
+    ? mk(dateFormat(value)) : '—';
+}
+function renderCentralCourses(rows) {
+  const total = rows.length;
+  const people = rows.reduce((sum,row) => sum + (Number(row.participant_count) || 0), 0);
+  const tableRows = rows.map(row =>
+    '<tr><td><b>' + skCourseDate(row.training_date) + '</b></td>' +
+    '<td>' + mk(row.location_name) + '</td>' +
+    '<td>' + mk(row.display_name || 'Nieuzupełnione') +
+      '<small class="sk-course-instructor-id">' + mk(row.instructor_id || '') + '</small></td>' +
+    '<td class="sk-course-count">' + mk(row.participant_count) + '</td>' +
+    '<td>' + (row.notes ? mk(row.notes) : '<span class="subtle">—</span>') + '</td></tr>'
+  ).join('');
+  return '<section class="card sk-course-register">' +
+    '<div class="sk-course-register-top"><div><h2>Rejestr szkoleń</h2>' +
+    '<p>Wszystkie szkolenia zgłoszone przez instruktorów SKS.</p></div>' +
+    '<div class="sk-course-totals"><div><strong>' + total + '</strong><span>szkoleń</span></div>' +
+    '<div><strong>' + people + '</strong><span>uczestników</span></div></div></div>' +
+    (total
+      ? '<div class="sk-table-scroll"><table class="table sk-course-table"><thead><tr>' +
+        '<th>Data</th><th>Miejsce</th><th>Instruktor</th><th>Osoby</th><th>Uwagi</th>' +
+        '</tr></thead><tbody>' + tableRows + '</tbody></table></div>'
+      : '<p class="sk-master-empty">Instruktorzy nie dodali jeszcze żadnego szkolenia.</p>') +
+    '</section>';
+}
+function rememberSKCourseDraft() {
+  for (const id of ['training_date','location_name','participant_count','notes']) {
+    const input = document.getElementById('sk-course-' + id);
+    if (input) skCourseDraft[id] = input.value;
+  }
+}
+function renderSKAddCourse(state) {
+  if (state.mode !== 'active') {
+    return '<section class="card sk-course-form-card"><h2>Autoryzacja nieaktywna</h2>' +
+      '<p>Rejestrowanie szkoleń wymaga aktywnej autoryzacji instruktorskiej.</p></section>';
+  }
+  function formField(id,label,type,extra) {
+    return '<label class="sk-course-field" for="sk-course-' + id + '">' +
+      '<span>' + label + '</span>' +
+      '<input id="sk-course-' + id + '" type="' + type + '" value="' + mk(skCourseDraft[id]) + '" ' +
+        extra + ' oninput="rememberSKCourseDraft()"></label>';
+  }
+  return '<section class="card sk-course-form-card">' +
+    '<p class="sk-course-form-intro">Wypełnij trzy pola i ewentualne uwagi. Szkolenie zostanie automatycznie przypisane do Twojego numeru SKS-I.</p>' +
+    '<form id="sk-course-form" onsubmit="saveSKCourse(event)">' +
+    '<div class="sk-course-form-grid">' +
+    formField('training_date','Data szkolenia','date','required') +
+    formField('location_name','Miejsce','text','required minlength="2" maxlength="140" placeholder="Np. Kraków, OSP Ochojno"') +
+    formField('participant_count','Liczba osób','number','required min="1" max="1000" step="1" placeholder="Np. 12" inputmode="numeric"') +
+    '</div>' +
+    '<label class="sk-course-field sk-course-notes" for="sk-course-notes">' +
+    '<span>Uwagi <small>(opcjonalnie)</small></span>' +
+    '<textarea id="sk-course-notes" rows="3" maxlength="1000" placeholder="Np. grupa OSP, szkolenie firmowe" oninput="rememberSKCourseDraft()">' +
+    mk(skCourseDraft.notes) + '</textarea></label>' +
+    '<div class="sk-course-form-bottom"><button id="sk-course-save" class="button sk-course-submit" type="submit">Zapisz szkolenie</button>' +
+    '<p id="sk-course-form-status" role="status" aria-live="polite"></p></div>' +
+    '</form></section>';
+}
+async function saveSKCourse(event) {
+  if (event && typeof event.preventDefault === 'function') event.preventDefault();
+  if (skCourseSaving) return;
+  rememberSKCourseDraft();
+  const message = document.getElementById('sk-course-form-status');
+  const button = document.getElementById('sk-course-save');
+  if (!message || !button) return;
+  skCourseSaving = true;
+  button.disabled = true;
+  button.textContent = 'Zapisywanie…';
+  message.textContent = '';
+  try {
+    await window.SKAuth.addInstructorCourse(skCourseDraft);
+    skCourseDraft = {training_date:'',location_name:'',participant_count:'',notes:''};
+    go('courses');
+  } catch (error) {
+    message.textContent = error && error.message || 'Nie udało się zapisać szkolenia.';
+  } finally {
+    skCourseSaving = false;
+    const buttonNow = document.getElementById('sk-course-save');
+    if (buttonNow) { buttonNow.disabled = false; buttonNow.textContent = 'Zapisz szkolenie'; }
+  }
+}
+function renderMyCourses(rows) {
+  const totalPeople = rows.reduce((sum,row) => sum + (Number(row.participant_count) || 0),0);
+  const items = rows.map(row =>
+    '<div class="sk-my-course-item"><div class="sk-my-course-date">' + skCourseDate(row.training_date) + '</div>' +
+    '<div class="sk-my-course-place"><strong>' + mk(row.location_name) + '</strong>' +
+      (row.notes ? '<p>' + mk(row.notes) + '</p>' : '') + '</div>' +
+    '<div class="sk-my-course-people"><strong>' + mk(row.participant_count) + '</strong> osób</div></div>'
+  ).join('');
+  return '<div class="sk-my-course-summary"><span><b>' + rows.length + '</b> szkoleń</span>' +
+    '<span><b>' + totalPeople + '</b> uczestników łącznie</span></div>' +
+    '<section class="card sk-my-course-card">' +
+    (rows.length
+      ? '<div class="sk-my-course-list">' + items + '</div>'
+      : '<div class="sk-course-empty"><h2>Nie masz jeszcze zapisanych szkoleń</h2>' +
+        '<p>Dodaj pierwsze szkolenie — wystarczą data, miejsce i liczba osób.</p>' +
+        '<button type="button" class="button" data-tab="addCourse" onclick="go(this.dataset.tab)">Dodaj szkolenie</button></div>') +
+    '</section>';
+}
+async function drawMyCourses() {
+  const version = ++coursesDrawVersion;
+  const view = document.getElementById('view');
+  const action = '<button type="button" class="button" data-tab="addCourse" onclick="go(this.dataset.tab)">+ Dodaj szkolenie</button>';
+  view.innerHTML = head('Moje szkolenia', 'Twoje szkolenia zapisane w systemie SKS.', action) +
+    '<section class="card"><p>Ładowanie szkoleń…</p></section>';
+  try {
+    const rows = await window.SKAuth.listMyCourses();
+    if (version !== coursesDrawVersion || current !== 'courses' ||
+        window.SKAuth.getState().mode !== 'active') return;
+    view.innerHTML = head('Moje szkolenia', 'Twoje szkolenia zapisane w systemie SKS.', action) +
+      renderMyCourses(rows);
+  } catch (_) {
+    if (version !== coursesDrawVersion || current !== 'courses') return;
+    view.innerHTML = head('Moje szkolenia', 'Twój rejestr prowadzonych szkoleń.') +
+      '<section class="card sk-course-form-card"><h2>Rejestr jeszcze niedostępny</h2>' +
+      '<p>Rejestr wymaga jednorazowej aktywacji w Supabase. Skontaktuj się z Centralą SKS.</p>' +
+      (window.SKAuth.getState().isAdmin === true
+        ? '<p><a href="https://github.com/karolhuzarski-maker/stop-krwotokom-system/blob/main/backend/005_training_registry.sql" target="_blank" rel="noopener noreferrer">Skrypt 005 do uruchomienia w Supabase ↗</a></p>' : '') +
+      '</section>';
+  }
+}
+
 const skMaterialCatalogue = [
   {name:'SK-01_Preambula_SKS_0.9.pdf', code:'SK-01', title:'Preambuła',
     detail:'Założenia i wartości polskiego systemu kontroli krwotoków.'},
