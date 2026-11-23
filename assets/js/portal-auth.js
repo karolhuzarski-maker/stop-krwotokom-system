@@ -8,8 +8,8 @@
   const configured = /^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(config.supabaseUrl || '') &&
     /^sb_publishable_[A-Za-z0-9_-]+$/.test(config.publishableKey || '');
   let client, initialization, revision = 0;
-  let state = { mode: configured ? 'guest' : 'disabled', email: '', profile: null };
-  const snapshot = () => ({ mode: state.mode, email: state.email, profile: state.profile && { ...state.profile } });
+  let state = { mode: configured ? 'guest' : 'disabled', email: '', profile: null, isAdmin: false };
+  const snapshot = () => ({ mode: state.mode, email: state.email, profile: state.profile && { ...state.profile }, isAdmin: state.isAdmin === true });
   function publish(next) {
     state = next;
     if (env.dispatchEvent && env.CustomEvent) env.dispatchEvent(new env.CustomEvent('sk:access', { detail: snapshot() }));
@@ -35,20 +35,24 @@
       const { data, error } = await client.auth.getUser();
       if (error || !data.user) {
         if (version !== revision) return snapshot();
-        return publish({ mode: 'guest', email: '', profile: null });
+        return publish({ mode: 'guest', email: '', profile: null, isAdmin: false });
       }
       const profileResult = await client.from('instructor_access')
         .select('display_name,instructor_id,enabled,valid_until').eq('user_id', data.user.id).maybeSingle();
       const permission = await client.rpc('portal_has_access');
+      // The central role is granted in a private database allowlist.
+      // If the central migration is not yet installed, normal instructor login still works.
+      const centralRole = await client.rpc('portal_is_admin');
       if (version !== revision) return snapshot();
       if (profileResult.error || permission.error) throw new Error('Nie można potwierdzić uprawnień.');
       return publish({
         mode: permission.data === true && profileResult.data ? 'active' : 'blocked',
-        email: data.user.email || '', profile: profileResult.data || null
+        email: data.user.email || '', profile: profileResult.data || null,
+        isAdmin: centralRole.error == null && centralRole.data === true
       });
     } catch (_) {
       if (version !== revision) return snapshot();
-      return publish({ mode: 'unavailable', email: '', profile: null });
+      return publish({ mode: 'unavailable', email: '', profile: null, isAdmin: false });
     }
   }
   async function init() {
@@ -64,7 +68,7 @@
       });
       return refresh();
     })().catch(() => {
-      publish({ mode: 'unavailable', email: '', profile: null });
+      publish({ mode: 'unavailable', email: '', profile: null, isAdmin: false });
       throw new Error('Usługa kont jest chwilowo niedostępna. Spróbuj ponownie później.');
     });
     await initialization;
@@ -91,7 +95,14 @@
       const { error } = await client.auth.signOut();
       if (error) throw new Error('Nie udało się wylogować. Spróbuj ponownie.');
     }
-    return publish({ mode: configured ? 'guest' : 'disabled', email: '', profile: null });
+    return publish({ mode: configured ? 'guest' : 'disabled', email: '', profile: null, isAdmin: false });
+  }
+  async function listCentralInstructors() {
+    if (state.isAdmin !== true) throw new Error('Brak uprawnień Centrali SKS.');
+    const api = await requireClient();
+    const { data, error } = await api.rpc('portal_admin_list_instructors');
+    if (error || !Array.isArray(data)) throw new Error('Nie udało się pobrać rejestru instruktorów.');
+    return data;
   }
   async function setPassword(password) {
     if (typeof password !== 'string' || password.length < 12) throw new Error('Hasło musi mieć co najmniej 12 znaków.');
@@ -121,6 +132,6 @@
   }
   return Object.freeze({
     isConfigured: () => configured, needsCaptcha: () => Boolean(config.turnstileSiteKey),
-    getState: snapshot, init, refresh, signIn, signOut, setPassword, resetPassword, mountCaptcha
+    getState: snapshot, init, refresh, signIn, signOut, setPassword, resetPassword, mountCaptcha, listCentralInstructors
   });
 });
