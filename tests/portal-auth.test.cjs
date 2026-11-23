@@ -6,7 +6,7 @@ const config = { supabaseUrl: 'https://example-project.supabase.co', publishable
 function harness(options = {}) {
   const calls = [];
   const user = { id: 'user-a', email: 'instructor@example.test' };
-  const profile = { instructor_id: 'SK-I-2026-000001', display_name: 'Test', enabled: true, valid_until: '2027-12-31' };
+  const profile = { instructor_id: 'SKS-I-2026-001', display_name: 'Test', enabled: true, valid_until: '2027-12-31' };
   let currentUser = options.guest ? null : user;
   const query = {
     select(columns) { calls.push(['select', columns]); return this; },
@@ -23,7 +23,13 @@ function harness(options = {}) {
       async resetPasswordForEmail(email, input) { calls.push(['reset', email, input]); return { error: null }; }
     },
     from(table) { calls.push(['from', table]); return query; },
-    async rpc(name) { calls.push(['rpc', name]); return options.permission || { data: true, error: null }; }
+    async rpc(name) {
+      calls.push(['rpc', name]);
+      if (name === 'portal_has_access') return options.permission || { data: true, error: null };
+      if (name === 'portal_is_admin') return options.centralPermission || { data: false, error: null };
+      if (name === 'portal_admin_list_instructors') return options.centralList || { data: [], error: null };
+      throw new Error('Unexpected RPC: ' + name);
+    }
   };
   const env = {
     location: { href: 'https://example.test/project/konto.html' },
@@ -89,7 +95,7 @@ test('callers cannot change the stored permission snapshot', async () => {
   const state = auth.getState();
   state.mode = 'blocked'; state.profile.instructor_id = 'changed';
   assert.equal(auth.getState().mode, 'active');
-  assert.equal(auth.getState().profile.instructor_id, 'SK-I-2026-000001');
+  assert.equal(auth.getState().profile.instructor_id, 'SKS-I-2026-001');
 });
 
 test('an in-flight refresh cannot restore access after sign-out', async () => {
@@ -134,4 +140,45 @@ test('the browser exposes no signup or privileged administration method', () => 
   assert.equal(auth.signUp, undefined);
   assert.equal(auth.admin, undefined);
   assert.equal(Object.isFrozen(auth), true);
+});
+
+
+test('ordinary instructor never receives the Central SKS role', async () => {
+  const { auth, calls } = harness();
+  const state = await auth.init();
+  assert.equal(state.mode, 'active');
+  assert.equal(state.isAdmin, false);
+  await assert.rejects(auth.listCentralInstructors(), /Brak uprawnień/);
+  assert.equal(calls.some(c => c[0] === 'rpc' && c[1] === 'portal_admin_list_instructors'), false);
+});
+
+test('only a verified positive server role enables the Central SKS register', async () => {
+  const rows = [{ instructor_id: 'SKS-I-2026-001', display_name: 'Test', email: 'instructor@example.test',
+    enabled: true, valid_until: '2029-11-23', created_at: '2026-11-23T18:00:00Z', status: 'active' }];
+  const { auth, calls } = harness({
+    centralPermission: { data: true, error: null },
+    centralList: { data: rows, error: null }
+  });
+  assert.equal((await auth.init()).isAdmin, true);
+  assert.deepEqual(await auth.listCentralInstructors(), rows);
+  assert.ok(calls.some(c => c[0] === 'rpc' && c[1] === 'portal_admin_list_instructors'));
+  await auth.signOut();
+  assert.equal(auth.getState().isAdmin, false);
+  await assert.rejects(auth.listCentralInstructors(), /Brak uprawnień/);
+});
+
+test('Central SKS role failure does not break instructor login and fails closed', async () => {
+  const { auth } = harness({ centralPermission: { data: null, error: new Error('migration pending') } });
+  const state = await auth.init();
+  assert.equal(state.mode, 'active');
+  assert.equal(state.isAdmin, false);
+});
+
+test('Central SKS register failures never return a fictitious list', async () => {
+  const { auth } = harness({
+    centralPermission: { data: true, error: null },
+    centralList: { data: null, error: new Error('database offline') }
+  });
+  await auth.init();
+  await assert.rejects(auth.listCentralInstructors(), /Nie udało się pobrać rejestru/);
 });
