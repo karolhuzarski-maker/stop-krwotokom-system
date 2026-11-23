@@ -14,6 +14,25 @@ function harness(options = {}) {
     async maybeSingle() { return options.profileResult || { data: profile, error: null }; }
   };
   const client = {
+    storage: {
+      from(bucket) {
+        calls.push(['storage', bucket]);
+        return {
+          async list(prefix, config) {
+            calls.push(['list', prefix, config]);
+            return options.materialList || { data: [], error: null };
+          },
+          async createSignedUrl(filename, seconds) {
+            calls.push(['signedUrl', filename, seconds]);
+            return options.materialUrl || { data: { signedUrl: 'https://example.test/signed-pdf' }, error: null };
+          },
+          async upload(filename, file, config) {
+            calls.push(['upload', filename, file, config]);
+            return options.materialUpload || { data: { path: filename }, error: null };
+          }
+        };
+      }
+    },
     auth: {
       async getUser() { calls.push(['getUser']); return options.getUser ? options.getUser() : { data: { user: currentUser }, error: null }; },
       onAuthStateChange(handler) { calls.push(['subscribe']); },
@@ -181,4 +200,58 @@ test('Central SKS register failures never return a fictitious list', async () =>
   });
   await auth.init();
   await assert.rejects(auth.listCentralInstructors(), /Nie udało się pobrać rejestru/);
+});
+
+test('active instructors can list private materials, not arbitrary Storage files', async () => {
+  const { auth, calls } = harness({ materialList: { data: [
+    { name: 'SK-01_Preambula_SKS_0.9.pdf' }, { name: 'random-file.html' }
+  ], error: null } });
+  await auth.init();
+  const files = await auth.listInstructorMaterials();
+  assert.equal(files.length, 1);
+  assert.equal(files[0].name, 'SK-01_Preambula_SKS_0.9.pdf');
+  assert.ok(calls.some(c => c[0] === 'storage' && c[1] === 'instructor-materials'));
+});
+
+test('private document links are short-lived and require authenticated access', async () => {
+  const { auth, calls } = harness();
+  await auth.init();
+  assert.equal(await auth.getInstructorMaterialUrl('SK-02_Karta_programu_SKS_0.9.pdf'),
+    'https://example.test/signed-pdf');
+  assert.ok(calls.some(c => c[0] === 'signedUrl' && c[2] === 60));
+  await assert.rejects(auth.getInstructorMaterialUrl('../../unsafe.pdf'), /Nieprawidłowy/);
+  await auth.signOut();
+  await assert.rejects(auth.getInstructorMaterialUrl('SK-01_Preambula_SKS_0.9.pdf'), /Brak aktywnego/);
+  await assert.rejects(auth.listInstructorMaterials(), /Brak aktywnego/);
+});
+
+test('only central administrator can upload PDF files to private materials', async () => {
+  const file = { name: 'SK-03_Standard_szkoleniowy_SKS_0.9.pdf', type: 'application/pdf', size: 12345 };
+  const instructor = harness();
+  await instructor.auth.init();
+  await assert.rejects(instructor.auth.uploadInstructorMaterials([file]), /Centrali SKS/);
+  assert.equal(instructor.calls.some(c => c[0] === 'upload'), false);
+  const central = harness({ centralPermission: { data: true, error: null } });
+  await central.auth.init();
+  assert.deepEqual(await central.auth.uploadInstructorMaterials([file]), [file.name]);
+  assert.ok(central.calls.some(c => c[0] === 'upload' && c[1] === file.name &&
+    c[3].upsert === true && c[3].contentType === 'application/pdf'));
+});
+
+test('admin upload rejects unsupported filenames and oversized files before sending', async () => {
+  const { auth, calls } = harness({ centralPermission: { data: true, error: null } });
+  await auth.init();
+  for (const file of [
+    { name: '../SK-01_bad.pdf', type: 'application/pdf', size: 1000 },
+    { name: 'SK-01_bad.html', type: 'text/html', size: 1000 },
+    { name: 'SK-01_bad.pdf', type: 'application/pdf', size: 11 * 1024 * 1024 },
+    { name: 'SK-01_bad.pdf', type: 'text/html', size: 1000 }
+  ]) await assert.rejects(auth.uploadInstructorMaterials([file]), /Dozwolone/);
+  assert.equal(calls.some(c => c[0] === 'upload'), false);
+});
+
+test('private material API errors cannot show fictitious available documents', async () => {
+  const { auth } = harness({ materialList: { data: null, error: new Error('Storage is offline') } });
+  await auth.init();
+  await assert.rejects(auth.listInstructorMaterials(), /Nie udało się pobrać/);
 });
