@@ -769,3 +769,8 @@ body.guest-mode #visitor .sk-inst-watermark {
 #visitor .sk-footer-author details[open] summary::after { content: " −"; }
 #visitor .sk-footer-author summary:hover, #visitor .sk-footer-author summary:focus-visible { color: #fff; text-decoration-color: #fff; }
 #visitor .sk-footer-author details p { margin: 9px 0 0; max-width: 350px; color: #d0d1d1; font-size: 11px; line-height: 1.7; }
+
+/* FAQ po usunieciu odniesien do zewnetrznego programu: trzy rowne karty na szerokim ekranie */
+@media (min-width: 901px) {
+  #visitor .sk-topics-questions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
