@@ -334,7 +334,22 @@ async function printInstructorCredential() {
         img.addEventListener('error', resolve, {once:true});
       })
     ));
-    window.print();
+    // Chrome proposes the current page title as the PDF filename.
+    // Use only the live, authenticated instructor name (not a hardcoded example).
+    const safeName = String(state.profile.display_name).normalize('NFD')
+      .replace(/[\\u0300-\\u036f]/g, '').replace(/ł/g, 'l').replace(/Ł/g, 'L')
+      .replace(/[^A-Za-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 80);
+    const previousTitle = document.title;
+    const onAfterPrint = () => { document.title = previousTitle; };
+    document.title = 'Legitymacja_Instruktora_SKS_' + (safeName || 'Instruktor');
+    window.addEventListener('afterprint', onAfterPrint, { once: true });
+    try {
+      window.print();
+    } catch (printError) {
+      window.removeEventListener('afterprint', onAfterPrint);
+      onAfterPrint();
+      throw printError;
+    }
   } catch (error) {
     modal('Legitymacja instruktora', '<p>' + mk(error && error.message || 'Nie udało się przygotować legitymacji.') + '</p>');
   } finally {
