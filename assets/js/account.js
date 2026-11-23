@@ -2,8 +2,23 @@
   'use strict';
   const $ = id => document.getElementById(id);
   const params = new URLSearchParams(location.hash.slice(1));
-  const activation = ['invite', 'recovery'].includes(params.get('type'));
-  const failedLink = Boolean(params.get('error') || new URLSearchParams(location.search).get('error'));
+  const queryParams = new URLSearchParams(location.search);
+  const activationKey = 'sks-pending-password';
+  let activation = ['invite', 'recovery'].includes(params.get('type')) ||
+    ['invite', 'recovery'].includes(queryParams.get('type'));
+  // Store only the invite intent, never authentication tokens.
+  // Supabase removes callback credentials from the URL during session initialization.
+  try {
+    const savedAt = Number(sessionStorage.getItem(activationKey) || 0);
+    if (savedAt && Date.now() - savedAt < 30 * 60 * 1000) activation = true;
+    else sessionStorage.removeItem(activationKey);
+    if (activation) sessionStorage.setItem(activationKey, String(Date.now()));
+  } catch (_) {}
+  const failedLink = Boolean(params.get('error') || queryParams.get('error'));
+  function clearActivation() {
+    activation = false;
+    try { sessionStorage.removeItem(activationKey); } catch (_) {}
+  }
   const auth = window.SKAuth;
   let busy = false, token = '', captcha;
   function message(text) { $('account-message').textContent = text; }
@@ -17,8 +32,11 @@
     $('account-email').textContent = state.email;
     $('login-form').hidden = isUser || state.mode === 'disabled' || state.mode === 'unavailable';
     $('password-form').hidden = true;
+    $('open-password-form').hidden = !isUser || activation;
     if (state.mode === 'unavailable') message('Nie można teraz potwierdzić uprawnień. Spróbuj ponownie później.');
-    if (state.mode === 'guest' && !failedLink) message('Zaloguj się adresem e-mail wskazanym w zaproszeniu.');
+    if (state.mode === 'guest' && !failedLink) message(activation ?
+      'Nie udało się jeszcze potwierdzić zaproszenia. Jeżeli formularz ustawienia hasła się nie pojawi, otwórz ponownie link z e-maila.' :
+      'Zaloguj się adresem e-mail wskazanym w zaproszeniu.');
     if (isUser && activation) {
       $('password-form').hidden = false;
       message('Potwierdzono adres. Ustaw własne hasło do konta.');
@@ -45,7 +63,9 @@
     busy = true; $('set-password-submit').disabled = true;
     try {
       await auth.setPassword($('account-new-password').value);
-      $('password-form').reset(); $('password-form').hidden = true;
+      clearActivation();
+      $('password-form').reset();
+      renderState(auth.getState());
       history.replaceState(null, '', location.pathname);
       message('Hasło zostało zapisane. Możesz przejść do portalu.');
     } catch (error) { message(error.message); }
@@ -60,9 +80,19 @@
     } catch (error) { message(error.message); }
     finally { busy = false; if (captcha) captcha.reset(); buttons(); }
   });
+  $('open-password-form').addEventListener('click', () => {
+    $('open-password-form').hidden = true;
+    $('password-form').hidden = false;
+    message('Ustaw nowe hasło do swojego konta.');
+    $('account-new-password').focus();
+  });
   $('account-sign-out').addEventListener('click', async () => {
-    try { renderState(await auth.signOut()); message('Wylogowano.'); }
+    try { clearActivation(); renderState(await auth.signOut()); message('Wylogowano.'); }
     catch (error) { message(error.message); }
+  });
+  // On a confirmation redirect the session can arrive after the first render.
+  window.addEventListener('sk:access', event => {
+    if (event.detail) renderState(event.detail);
   });
   (async () => {
     try {
