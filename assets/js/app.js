@@ -512,6 +512,17 @@ function drawConnectedPortal() {
     drawMaterials(state);
     return;
   }
+  if (current === 'courses') {
+    if (state.mode === 'active') drawMyCourses();
+    else v.innerHTML = head('Moje szkolenia', 'Rejestr prowadzonych szkoleń.') +
+      '<section class="card"><p>Dostęp do rejestru wymaga aktywnej autoryzacji.</p></section>';
+    return;
+  }
+  if (current === 'addCourse') {
+    rememberSKCourseDraft();
+    v.innerHTML = head('Dodaj szkolenie', 'Prosty wpis do rejestru SKS.') + renderSKAddCourse(state);
+    return;
+  }
   if (current === 'central') {
     if (state.isAdmin !== true) {
       v.innerHTML = head('Centrala SKS', 'Dostęp ograniczony.') +
@@ -535,7 +546,7 @@ function drawConnectedPortal() {
       '<span class="sk-home-link-arrow" aria-hidden="true">›</span></button>';
     const actions =
       homeLink('profile', '♙', 'Mój profil i ID', 'Numer instruktora, licencja i dokumenty') +
-      homeLink('courses', '▤', 'Moje szkolenia', 'Rejestr szkoleń w przygotowaniu') +
+      homeLink('courses', '▤', 'Moje szkolenia', 'Sprawdź zapisane szkolenia') +
       (state.isAdmin === true ? homeLink('central', '♜', 'Centrala SKS', 'Wszystkie konta i autoryzacje instruktorów') : '');
     v.innerHTML = head('Pulpit instruktora', 'Twój punkt startowy w systemie STOP KRWOTOKOM.') +
       '<div class="sk-home-overview">' +
