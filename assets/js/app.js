@@ -364,7 +364,7 @@ async function saveSKCourseEdit(event) {
   try {
     await window.SKAuth.updateInstructorCourse(id,data);
     skCourseEditingId = null;
-    drawMyCourses();
+    if (current === 'courses') drawMyCourses();
   } catch (error) {
     if (current === 'courses' && document.getElementById('sk-course-edit-status'))
       document.getElementById('sk-course-edit-status').textContent =
@@ -385,7 +385,7 @@ async function deleteSKCourse(id) {
   try {
     await window.SKAuth.deleteInstructorCourse(id);
     if (skCourseEditingId === id) skCourseEditingId = null;
-    drawMyCourses();
+    if (current === 'courses') drawMyCourses();
   } catch (error) {
     modal('Nie udało się usunąć szkolenia',
       '<p>' + mk(error && error.message || 'Spróbuj ponownie później.') + '</p>');
