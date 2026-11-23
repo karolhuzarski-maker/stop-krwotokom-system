@@ -471,3 +471,27 @@ body.guest-mode .brand-link{flex-shrink:0;gap:17px}
 #portal-controls a.ghost-demo { display:inline-block; text-decoration:none; }
 .side-bottom a { color:inherit; text-decoration:underline; text-underline-offset:3px; }
 .side-bottom a:hover { color:#fff; }
+
+/* Czytelna interaktywność bocznego menu portalu instruktora. */
+.sidebar #nav .nav-item,
+.sidebar #nav .nav-verify-link,
+.sidebar .brand[role="button"] {
+  cursor: pointer;
+}
+.sidebar #nav .nav-item {
+  transition: background-color .15s ease, color .15s ease;
+}
+.sidebar #nav .nav-item:not(.active):hover,
+.sidebar #nav .nav-item:not(.active):focus-visible {
+  background: rgba(255,255,255,.16);
+  color: #fff;
+}
+.sidebar #nav .nav-item:focus-visible,
+.sidebar #nav .nav-verify-link:focus-visible,
+.sidebar .brand[role="button"]:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.sidebar #nav .nav-item.active:hover {
+  filter: brightness(1.06);
+}
