@@ -1,6 +1,6 @@
-/* SKS — wybrany wariant light tactical A5; grafika dekoracyjna nie zawiera danych osobowych. */
-.sk-profile-credential{display:grid;grid-template-columns:minmax(0,550px) minmax(270px,1fr);align-items:start;gap:24px;max-width:1120px}
-.sk-id-preview-col{min-width:0}
+/* SKS — wybrany wariant light tactical A6; grafika dekoracyjna nie zawiera danych osobowych. */
+.sk-profile-credential{display:grid;grid-template-columns:minmax(0,380px) minmax(270px,1fr);align-items:start;gap:22px;max-width:980px}
+.sk-id-preview-col{min-width:0;max-width:380px}
 .sk-id-paper{position:relative;isolation:isolate;container-type:inline-size;box-sizing:border-box;width:100%;aspect-ratio:1053/1494;overflow:hidden;border-radius:10px;border:1px solid #d4d9dc;background:#f8f9fa;color:#171b20;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-variant-numeric:tabular-nums;box-shadow:0 14px 34px rgba(39,37,41,.15)}
 .sk-id-paper *{box-sizing:border-box}
 .sk-id-artwork{display:block;position:absolute;inset:0;z-index:0;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none}
@@ -12,7 +12,7 @@
 .sk-id-hcore-symbol img{position:absolute;width:100%;height:auto;top:0;left:0;display:block;filter:brightness(.68) saturate(1.2)}
 .sk-id-hcore-logo>strong{display:block;font-size:4.15cqi;white-space:nowrap;letter-spacing:-.04em;line-height:1;font-weight:900;color:#191b1e;margin-top:-.7cqi}
 .sk-id-hcore-logo>strong em{color:#bd0c1b;font-style:normal}
-.sk-id-hcore-logo>small{font-size:1.31cqi;letter-spacing:.055em;margin-top:1.1cqi;white-space:nowrap;font-weight:850;color:#44474a}
+.sk-id-hcore-logo>small{font-size:1.68cqi;letter-spacing:.025em;margin-top:1.1cqi;white-space:nowrap;font-weight:850;color:#44474a}
 .sk-id-tagline{top:21.2%;left:11%;right:11%;text-align:center;font-size:2.45cqi;font-weight:800;letter-spacing:.21em;line-height:1.25;white-space:nowrap}
 .sk-id-heading{top:27.6%;left:16.6%;margin:0;color:#fff!important;font-size:6.1cqi!important;line-height:1.045!important;letter-spacing:.01em;font-weight:900!important;text-shadow:0 1px 2px rgba(40,0,0,.2)}
 .sk-id-field{display:flex;flex-direction:column;align-items:flex-start;line-height:1.12}
@@ -45,19 +45,19 @@
 .sk-id-detail-card p{margin:10px 0;overflow-wrap:anywhere}
 .sk-id-document-links{display:flex;flex-direction:column;gap:8px;margin-top:15px;font-size:13px}
 .sk-id-document-links a{color:#9d2932}
-@media(max-width:1080px){.sk-profile-credential{grid-template-columns:minmax(0,510px) minmax(220px,1fr);gap:16px}}
-@media(max-width:870px){.sk-profile-credential{grid-template-columns:minmax(0,560px);max-width:560px}.sk-id-sidebar-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.sk-id-action-card{grid-column:1/-1}}
-@media(max-width:620px){.sk-id-sidebar-col{display:flex;flex-direction:column}.sk-id-paper{border-radius:6px}}
-@page{size:A5 portrait;margin:0}
+@media(max-width:1080px){.sk-profile-credential{grid-template-columns:minmax(0,350px) minmax(220px,1fr);gap:16px}.sk-id-preview-col{max-width:350px}}
+@media(max-width:870px){.sk-profile-credential{grid-template-columns:minmax(0,1fr);max-width:600px}.sk-id-preview-col{width:100%;max-width:350px}.sk-id-sidebar-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.sk-id-action-card{grid-column:1/-1}}
+@media(max-width:620px){.sk-id-sidebar-col{display:flex;flex-direction:column}.sk-id-preview-col{max-width:min(100%,340px)}.sk-id-paper{border-radius:6px}}
+@page{size:105mm 148mm;margin:0}
 @media print{
 /* WAŻNE: historyczne CSS portalu zawiera "body * { visibility:hidden!important }".
    Jawnie odsłaniamy legitymację, jej tekst i grafiki. Inne sekcje pozostają ukryte. */
 body #sk-instructor-id,body #sk-instructor-id * {visibility:visible!important}
-html,body{margin:0!important;padding:0!important;background:white!important;width:148mm!important;height:210mm!important;overflow:hidden!important}
+html,body{margin:0!important;padding:0!important;background:white!important;width:105mm!important;height:148mm!important;overflow:hidden!important}
 body{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 body>#visitor,body>.modal-back,.shell .sidebar,.shell .topbar,.sk-id-sidebar-col,.page-head{display:none!important}
-body>.shell,.shell .main,.shell .main main,#view,.sk-profile-credential,.sk-id-preview-col{display:block!important;min-width:0!important;min-height:0!important;width:148mm!important;height:210mm!important;max-width:none!important;margin:0!important;padding:0!important;border:0!important;overflow:hidden!important;box-shadow:none!important}
+body>.shell,.shell .main,.shell .main main,#view,.sk-profile-credential,.sk-id-preview-col{display:block!important;min-width:0!important;min-height:0!important;width:105mm!important;height:148mm!important;max-width:none!important;margin:0!important;padding:0!important;border:0!important;overflow:hidden!important;box-shadow:none!important}
 .shell .main{flex:none!important}
-.sk-id-paper{width:148mm!important;height:210mm!important;max-width:none!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;aspect-ratio:auto!important;break-inside:avoid!important;page-break-inside:avoid!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+.sk-id-paper{width:105mm!important;height:148mm!important;max-width:none!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;aspect-ratio:auto!important;break-inside:avoid!important;page-break-inside:avoid!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 .sk-id-paper *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 }
