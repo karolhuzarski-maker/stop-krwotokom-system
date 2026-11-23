@@ -50,6 +50,9 @@
 @media(max-width:620px){.sk-id-sidebar-col{display:flex;flex-direction:column}.sk-id-paper{border-radius:6px}}
 @page{size:A5 portrait;margin:0}
 @media print{
+/* WAŻNE: historyczne CSS portalu zawiera "body * { visibility:hidden!important }".
+   Jawnie odsłaniamy legitymację, jej tekst i grafiki. Inne sekcje pozostają ukryte. */
+body #sk-instructor-id,body #sk-instructor-id * {visibility:visible!important}
 html,body{margin:0!important;padding:0!important;background:white!important;width:148mm!important;height:210mm!important;overflow:hidden!important}
 body{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 body>#visitor,body>.modal-back,.shell .sidebar,.shell .topbar,.sk-id-sidebar-col,.page-head{display:none!important}
