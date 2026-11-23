@@ -27,7 +27,7 @@ let centralDrawVersion = 0;
 
 function nav() {
   const state = getAuthState();
-  document.getElementById('nav').innerHTML = tabs.filter(tab => ['courses','addCourse','materials','profile'].includes(tab[2])).map(tab => {
+  document.getElementById('nav').innerHTML = tabs.filter(tab => ['home','courses','addCourse','materials','profile'].includes(tab[2])).map(tab => {
     const locked = !isSignedIn(state);
     return '<button type="button" class="nav-item ' + (current === tab[2] ? 'active ' : '') +
       (locked ? 'nav-guest' : '') + '" onclick="go(\'' + tab[2] + '\')">' +
@@ -209,7 +209,29 @@ function drawConnectedPortal() {
   const name = mk(profile.display_name || 'Konto instruktora');
   const expiry = profile.valid_until ? mk(dateFormat(profile.valid_until)) : 'Nie ustalono';
   const status = active ? 'Autoryzacja aktywna' : 'Autoryzacja nieaktywna';
-  if (current === 'home' || current === 'profile') {
+  if (current === 'home') {
+    const homeLink = (tab, symbol, title, detail) =>
+      '<button type="button" class="sk-home-link" data-tab="' + tab + '" onclick="go(this.dataset.tab)">' +
+      '<span class="sk-home-link-icon" aria-hidden="true">' + symbol + '</span>' +
+      '<span class="sk-home-link-copy"><strong>' + title + '</strong><small>' + detail + '</small></span>' +
+      '<span class="sk-home-link-arrow" aria-hidden="true">›</span></button>';
+    const actions =
+      homeLink('profile', '♙', 'Mój profil i ID', 'Numer instruktora, licencja i dokumenty') +
+      homeLink('courses', '▤', 'Moje szkolenia', 'Rejestr szkoleń w przygotowaniu') +
+      (state.isAdmin === true ? homeLink('central', '♜', 'Centrala SKS', 'Wszystkie konta i autoryzacje instruktorów') : '');
+    v.innerHTML = head('Pulpit instruktora', 'Twój punkt startowy w systemie STOP KRWOTOKOM.') +
+      '<div class="sk-home-overview">' +
+      '<section class="card sk-home-greeting"><div class="eyebrow">TWOJE KONTO</div>' +
+      '<h2>Witaj, ' + name + '</h2>' +
+      '<p>Wybierz, czym chcesz się teraz zająć. Informacje o numerze SKS-I i dokumenty znajdziesz w swoim profilu.</p></section>' +
+      '<section class="card sk-home-status"><h2>Status uprawnień</h2>' +
+      '<p><span class="tag ' + (active ? 'green' : 'gold') + '">' + status + '</span></p>' +
+      '<p class="sk-home-validity">Ważność: <strong>' + expiry + '</strong></p></section></div>' +
+      '<h2 class="sk-home-heading">Szybki dostęp</h2>' +
+      '<div class="sk-home-links">' + actions + '</div>';
+    return;
+  }
+  if (current === 'profile') {
     const profileCard = '<div class="grid"><section class="card span2">' +
       '<div class="badgeid"><div class="eyebrow">STOP KRWOTOKOM SYSTEM</div>' +
       '<strong>INSTRUKTOR</strong><div class="line"></div>' +
@@ -220,14 +242,13 @@ function drawConnectedPortal() {
       '<section class="card"><h2>Twoje uprawnienia</h2>' +
       '<p>Numer SKS-I jest stały. O zakresie i ważności autoryzacji decyduje organizator.</p>' +
       '<a class="button secondary" style="display:inline-block;margin-top:18px" href="mailto:stop@h-core.edu.pl">Kontakt z organizatorem</a></section></div>';
-    const notice = current === 'profile' ?
-      '<section class="card" style="margin-top:18px"><h2>Dokumenty systemowe</h2><p>Dokumenty możesz otworzyć, pobrać lub zapisać jako PDF.</p>' +
+    const documents =
+      '<section class="card" style="margin-top:18px"><h2>Dokumenty systemowe</h2>' +
+      '<p>Dokumenty możesz otworzyć, pobrać lub zapisać jako PDF.</p>' +
       '<div class="inline-actions" style="margin-top:16px;gap:10px"><a class="button secondary" href="regulamin-portalu.html">Regulamin portalu ↗</a>' +
       '<a class="button secondary" href="polityka-prywatnosci.html">Polityka prywatności (RODO) ↗</a></div></section>' +
-      '<p class="subtle" style="margin-top:18px">Licencja instruktorska PDF i identyfikator do pobrania zostaną udostępnione po uruchomieniu modułu dokumentów.</p>' :
-      '<p class="subtle" style="margin-top:20px">Ewidencja szkoleń, certyfikaty i biblioteka materiałów będą uruchamiane etapami.</p>';
-    v.innerHTML = head(current === 'profile' ? 'Mój profil i ID' : 'Pulpit instruktora',
-      current === 'profile' ? 'Twoje dane i status autoryzacji.' : 'Twoje konto instruktorskie.') + profileCard + notice;
+      '<p class="subtle" style="margin-top:18px">Licencja instruktorska PDF i identyfikator do pobrania zostaną udostępnione po uruchomieniu modułu dokumentów.</p>';
+    v.innerHTML = head('Mój profil i ID', 'Twoje dane, numer SKS-I i dokumenty.') + profileCard + documents;
     return;
   }
   const titles = {courses:'Moje szkolenia', addCourse:'Dodaj szkolenie', materials:'Materiały'};
