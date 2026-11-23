@@ -212,6 +212,7 @@ function renderSKMaterials(files, isAdmin) {
   const admin = isAdmin ?
     '<section class="card sk-material-admin"><h2>Publikacja dokumentów — Centrala SKS</h2>' +
     '<p>Wybierz przygotowane pliki PDF (możesz zaznaczyć wszystkie trzy naraz). Po przesłaniu będą dostępne wyłącznie dla aktywnych instruktorów i Centrali SKS. Ponowne przesłanie pliku o tej samej nazwie zastąpi poprzednią wersję.</p>' +
+    '<p style="margin-top:10px">Przy pierwszej publikacji wykonaj <a href="https://github.com/karolhuzarski-maker/stop-krwotokom-system/blob/main/backend/004_private_materials_admin.sql" target="_blank" rel="noopener noreferrer">jednorazowy skrypt uprawnień biblioteki</a> w Supabase SQL Editor.</p>' +
     '<div class="sk-material-upload-row"><input id="sk-material-upload" type="file" accept=".pdf,application/pdf" multiple aria-label="Wybierz pliki PDF do prywatnej biblioteki"/>' +
     '<button class="button" id="sk-material-upload-button" type="button" onclick="uploadSKMaterials()">Opublikuj pliki PDF</button></div>' +
     '<p class="sk-material-upload-status" id="sk-material-upload-status" role="status" aria-live="polite"></p></section>' : '';
