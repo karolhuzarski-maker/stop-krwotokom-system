@@ -294,29 +294,66 @@ body.guest-mode #visitor .hero-footnote {
 }
 #visitor .sk-hero-organizer a,
 #visitor .sk-footer-organizer a {
-  display: block;
-  width: 130px;
+  display: flex;
   flex: none;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  width: 158px;
+  padding: 8px 10px 7px;
+  border: 1px solid #e4e1dc;
   border-radius: 3px;
-  background: #202326;
+  background: #fff;
+  box-shadow: 0 2px 12px #0000000d;
+  text-align: center;
   text-decoration: none;
 }
 #visitor .sk-hero-organizer a:hover,
-#visitor .sk-footer-organizer a:hover { background: #32383c; }
+#visitor .sk-footer-organizer a:hover {
+  border-color: #c9c6c0;
+  background: #fff;
+  box-shadow: 0 4px 16px #0000001c;
+}
 #visitor .sk-hero-organizer a:focus-visible,
 #visitor .sk-footer-organizer a:focus-visible { outline: 2px solid var(--sk-red); outline-offset: 3px; }
-#visitor .sk-hero-organizer img,
-#visitor .sk-footer-organizer img { display: block; width: 100%; height: auto; }
-#visitor .sk-logo-tagline {
+#visitor .sk-hcore-symbol {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 59px;
+  overflow: hidden;
+}
+#visitor .sk-hcore-symbol img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: brightness(.68) saturate(1.2);
+}
+#visitor .sk-hero-organizer a > strong,
+#visitor .sk-footer-organizer a > strong {
   display: block;
   margin-top: -3px;
-  padding-bottom: 7px;
-  color: #fff;
-  font-size: 6px;
-  font-weight: 750;
+  color: #191b1e;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -.04em;
+  white-space: nowrap;
+}
+#visitor .sk-hero-organizer a > strong em,
+#visitor .sk-footer-organizer a > strong em { color: #bd0c1b; font-style: normal; }
+#visitor .sk-hero-organizer a > small,
+#visitor .sk-footer-organizer a > small {
+  display: block;
+  margin-top: 4px;
+  color: #44474a;
+  font-size: 6.3px;
+  font-weight: 850;
   line-height: 1.2;
   letter-spacing: .025em;
-  text-align: center;
   white-space: nowrap;
 }
 body.guest-mode #visitor .hero-photo-wrap {
