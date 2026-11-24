@@ -421,6 +421,13 @@ body.guest-mode #visitor .hero-photo-wrap img.sk-cutout-photo {
 #visitor .split-heading h2 { margin-bottom: 0; }
 #visitor .split-heading > p { max-width: 460px; margin: 0; color: var(--sk-muted); font-size: 14px; line-height: 1.8; }
 #visitor .program-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+#visitor .sk-certificate-preview { width: min(100%, 960px); margin: 64px auto 0; }
+#visitor .sk-certificate-preview figcaption { display: flex; flex-direction: column; align-items: center; gap: 7px; margin-bottom: 20px; text-align: center; }
+#visitor .sk-certificate-preview figcaption span { color: var(--sk-red); font-size: 11px; font-weight: 700; letter-spacing: .14em; }
+#visitor .sk-certificate-preview figcaption small { color: var(--sk-muted); font-size: 12px; line-height: 1.5; }
+#visitor .sk-certificate-preview a { display: block; }
+#visitor .sk-certificate-preview img { display: block; width: 100%; height: auto; border: 1px solid var(--sk-line); border-radius: 3px; box-shadow: 0 16px 45px rgba(25, 30, 32, .13); transition: box-shadow .2s ease; }
+#visitor .sk-certificate-preview a:hover img { box-shadow: 0 20px 50px rgba(25, 30, 32, .2); }
 #visitor .program-card {
   position: relative;
   display: flex;
@@ -568,6 +575,7 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
   #visitor .v2-section h2, #visitor .sk-inst-layout h2, #visitor .sk-inline-section h2 { font-size: 32px; line-height: 1.13; }
   #visitor .split-heading { margin-bottom: 27px; gap: 23px; }
   #visitor .program-cards { grid-template-columns: 1fr; gap: 15px; }
+  #visitor .sk-certificate-preview { margin-top: 42px; }
   #visitor .program-card { min-height: 300px; padding: 25px; }
   #visitor .program-card h3 { font-size: 25px; }
   #visitor .program-symbol { margin-top: 18px; }
