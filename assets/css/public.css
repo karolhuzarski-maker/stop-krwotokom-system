@@ -277,6 +277,36 @@ body.guest-mode #visitor .hero-footnote {
   line-height: 1.6;
   letter-spacing: .02em;
 }
+#visitor .sk-hero-organizer {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  margin-top: 27px;
+  padding-top: 17px;
+  border-top: 1px solid #e7e4df;
+}
+#visitor .sk-hero-organizer > span,
+#visitor .sk-footer-organizer > span {
+  color: #777773;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: .02em;
+}
+#visitor .sk-hero-organizer a,
+#visitor .sk-footer-organizer a {
+  display: block;
+  width: 130px;
+  flex: none;
+  border-radius: 3px;
+  background: #202326;
+  text-decoration: none;
+}
+#visitor .sk-hero-organizer a:hover,
+#visitor .sk-footer-organizer a:hover { background: #32383c; }
+#visitor .sk-hero-organizer a:focus-visible,
+#visitor .sk-footer-organizer a:focus-visible { outline: 2px solid var(--sk-red); outline-offset: 3px; }
+#visitor .sk-hero-organizer img,
+#visitor .sk-footer-organizer img { display: block; width: 100%; height: auto; }
 body.guest-mode #visitor .hero-photo-wrap {
   order: 1;
   position: relative;
@@ -403,6 +433,8 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
 #visitor .sk-footer { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; }
 #visitor .sk-footer strong { color: #fff; font-size: 18px; font-weight: 650; letter-spacing: -.02em; }
 #visitor .sk-footer p { max-width: 350px; margin: 12px 0 0; color: #d0d1d1; font-size: 12px; line-height: 1.8; }
+#visitor .sk-footer-organizer { display: flex; align-items: center; justify-content: flex-end; gap: 17px; margin-top: 17px; }
+#visitor .sk-footer-organizer > span { color: #b7b9b9; }
 #visitor .sk-footer small { display: block; margin-top: 9px; color: #b7b9b9; font-size: 10px; line-height: 1.7; }
 #visitor .sk-footer > div:last-child { text-align: right; }
 #visitor .footer-panel-link { padding: 10px 15px; border: 1px solid #737678; border-radius: 4px; color: #fff; background: transparent; font-size: 11px; }
@@ -499,6 +531,7 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
   #visitor .sk-inst-aside b { font-size: 17px; }
   #visitor .sk-footer { flex-direction: column; gap: 30px; }
   #visitor .sk-footer > div:last-child { text-align: left; }
+  #visitor .sk-footer-organizer { justify-content: flex-start; }
   #visitor .footer-v2 { padding-block: 35px; }
 }
 
