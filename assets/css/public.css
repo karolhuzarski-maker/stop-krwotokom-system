@@ -505,6 +505,17 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
 #visitor .sk-footer-organizer > span { color: #b7b9b9; }
 #visitor .sk-footer small { display: block; margin-top: 9px; color: #b7b9b9; font-size: 10px; line-height: 1.7; }
 #visitor .sk-footer > div:last-child { text-align: right; }
+#visitor .sk-legal-bases { margin-top: 4px; font-size: 12px; line-height: 1.8; }
+#visitor .sk-legal-bases summary { display: inline-block; list-style: none; color: #d0d1d1; cursor: pointer; }
+#visitor .sk-legal-bases summary::-webkit-details-marker { display: none; }
+#visitor .sk-legal-bases summary::after { content: "⌄"; display: inline-block; margin-left: 4px; transition: transform .15s ease; }
+#visitor .sk-legal-bases[open] summary::after { transform: rotate(180deg); }
+#visitor .sk-legal-bases summary:hover, #visitor .sk-legal-bases summary:focus-visible { color: #fff; }
+#visitor .sk-legal-bases summary:focus-visible { outline: 2px solid var(--sk-red); outline-offset: 3px; }
+#visitor .sk-legal-bases ul { margin: 8px 0 0; padding: 0; list-style: none; }
+#visitor .sk-legal-bases li + li { margin-top: 8px; }
+#visitor .sk-legal-bases a { color: #fff; text-underline-offset: 3px; }
+#visitor .sk-legal-bases li span { display: block; color: #b7b9b9; font-size: 11px; }
 #visitor .footer-panel-link { padding: 10px 15px; border: 1px solid #737678; border-radius: 4px; color: #fff; background: transparent; font-size: 11px; }
 #visitor .footer-panel-link:hover { background: #ffffff0d; border-color: #fff; }
 
