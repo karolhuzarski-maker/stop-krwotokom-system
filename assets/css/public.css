@@ -738,18 +738,20 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
 }
 #visitor .sk-centres-collage {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
   gap: 12px;
   width: 100%;
   max-width: 480px;
+  aspect-ratio: 480 / 330;
   justify-self: center;
 }
 #visitor .sk-centres-shot {
   position: relative;
   min-width: 0;
+  min-height: 0;
   margin: 0;
   overflow: hidden;
-  aspect-ratio: 1.12;
   border-radius: 6px;
   background: var(--sk-paper);
 }
@@ -760,7 +762,8 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
   object-fit: cover;
   object-position: center;
 }
-#visitor .sk-centres-shot:first-child img { object-position: center 42%; }
+#visitor .sk-centres-shot:first-child { grid-column: 1; grid-row: 1 / span 2; }
+#visitor .sk-centres-shot:first-child img { object-position: 55% center; }
 #visitor .sk-centres-shot figcaption, #visitor .sk-dates-photo figcaption {
   position: absolute;
   inset: auto 0 0;
@@ -789,8 +792,9 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
 }
 @media (max-width: 640px) {
   #visitor .sk-centres-copy h2, #visitor .sk-dates-copy h2 { font-size: 32px; line-height: 1.13; }
-  #visitor .sk-centres-collage { gap: 10px; }
+  #visitor .sk-centres-collage { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto; gap: 10px; aspect-ratio: auto; }
   #visitor .sk-centres-shot { aspect-ratio: 1; }
+  #visitor .sk-centres-shot:first-child { grid-column: 1 / -1; grid-row: 1; aspect-ratio: 4 / 3; }
   #visitor .sk-centres-shot figcaption, #visitor .sk-dates-photo figcaption { padding: 28px 9px 9px; font-size: 10px; }
 }
 
