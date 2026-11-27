@@ -419,10 +419,6 @@ async function drawMyCourses() {
 }
 
 const skMaterialCatalogue = [
-  {name:'SK-01_Preambula_SKS_0.9.pdf', code:'SK-01', title:'Preambuła',
-    detail:'Założenia i wartości polskiego systemu kontroli krwotoków.'},
-  {name:'SK-02_Karta_programu_SKS_0.9.pdf', code:'SK-02', title:'Karta programu',
-    detail:'Cele, moduły i efekty uczenia się kursu podstawowego.'},
   {name:'SK-03_Standard_szkoleniowy_SKS_0.9.pdf', code:'SK-03', title:'Standard szkoleniowy',
     detail:'Obowiązujące założenia technik, organizacji ćwiczeń i oceny uczestnika.'}
 ];
@@ -443,14 +439,14 @@ function renderSKMaterials(files, isAdmin) {
   }).join('');
   const admin = isAdmin ?
     '<section class="card sk-material-admin"><h2>Publikacja dokumentów — Centrala SKS</h2>' +
-    '<p>Wybierz przygotowane pliki PDF (możesz zaznaczyć wszystkie trzy naraz). Po przesłaniu będą dostępne wyłącznie dla aktywnych instruktorów i Centrali SKS. Ponowne przesłanie pliku o tej samej nazwie zastąpi poprzednią wersję.</p>' +
+    '<p>Wybierz PDF standardu szkoleniowego SK-03. Po przesłaniu będzie dostępny wyłącznie dla aktywnych instruktorów i Centrali SKS. Ponowne przesłanie pliku o tej samej nazwie zastąpi poprzednią wersję.</p>' +
     '<p style="margin-top:10px">Przy pierwszej publikacji wykonaj <a href="https://github.com/karolhuzarski-maker/stop-krwotokom-system/blob/main/backend/004_private_materials_admin.sql" target="_blank" rel="noopener noreferrer">jednorazowy skrypt uprawnień biblioteki</a> w Supabase SQL Editor.</p>' +
-    '<div class="sk-material-upload-row"><input id="sk-material-upload" type="file" accept=".pdf,application/pdf" multiple aria-label="Wybierz pliki PDF do prywatnej biblioteki"/>' +
+    '<div class="sk-material-upload-row"><input id="sk-material-upload" type="file" accept=".pdf,application/pdf" aria-label="Wybierz PDF standardu szkoleniowego SK-03"/>' +
     '<button class="button" id="sk-material-upload-button" type="button" onclick="uploadSKMaterials()">Opublikuj pliki PDF</button></div>' +
     '<p class="sk-material-upload-status" id="sk-material-upload-status" role="status" aria-live="polite"></p></section>' : '';
-  return '<div class="sk-material-intro"><p>Dokumenty systemowe dostępne dla autoryzowanych instruktorów. Pliki są przechowywane w prywatnym magazynie Supabase, nie na publicznej stronie.</p></div>' +
+  return '<div class="sk-material-intro"><p>Standard szkoleniowy dostępny dla autoryzowanych instruktorów. Plik jest przechowywany w prywatnym magazynie Supabase.</p></div>' +
     '<div class="sk-material-grid">' + cards + '</div>' + admin +
-    '<p class="subtle" style="margin-top:18px">Wydanie 0.9 jest robocze; dokumenty będą aktualizowane po dalszym audycie.</p>';
+    '<p class="subtle" style="margin-top:18px">Wydanie 0.9 jest robocze; standard będzie aktualizowany po dalszym audycie.</p>';
 }
 async function drawMaterials(state) {
   const view = document.getElementById('view');

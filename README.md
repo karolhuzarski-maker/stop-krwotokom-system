@@ -53,4 +53,4 @@ Testy imitują odpowiedzi Auth. Nie zastępują testu rzeczywistego projektu Sup
 
 ## Dane i materiały
 
-Repozytorium i GitHub Pages są publiczne. Dane uczestników i materiały tylko dla instruktorów muszą pozostać w bazie/prywatnym magazynie. Na stronie umieszczamy wyłącznie klucz **publishable**; klucze secret/service_role i hasło SMTP zostają w usługach serwerowych.
+Repozytorium i GitHub Pages są publiczne. Dane uczestników oraz standard szkoleniowy SK-03 pozostają w bazie/prywatnym magazynie; Preambuła SK-01 i Karta programu SK-02 są publiczne. Na stronie umieszczamy wyłącznie klucz **publishable**; klucze secret/service_role i hasło SMTP zostają w usługach serwerowych.
