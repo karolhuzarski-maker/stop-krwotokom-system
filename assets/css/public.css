@@ -399,7 +399,7 @@ body.guest-mode #visitor .hero-photo-wrap img.sk-cutout-photo {
   mask-image: none;
 }
 #visitor .sk-hero-photo-stack { flex-direction: column; gap: 16px; }
-#visitor .sk-hero-photo-stack .sk-hero-detail-photo { display: block; width: 100%; height: auto; border-radius: 8px; box-shadow: 0 5px 18px #00000018; }
+#visitor .sk-hero-photo-stack .sk-hero-detail-photo { display: block; align-self: center; width: min(85%, 480px); height: auto; border-radius: 8px; box-shadow: 0 5px 18px #00000018; }
 
 #visitor .proof-band {
   --sk-band-line: #ffffff29;
