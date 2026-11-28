@@ -399,7 +399,7 @@ body.guest-mode #visitor .hero-photo-wrap img.sk-cutout-photo {
   mask-image: none;
 }
 #visitor .sk-hero-photo-stack { flex-direction: column; gap: 16px; }
-#visitor .sk-hero-photo-stack .sk-hero-detail-photo { display: block; width: min(100%, 320px); height: auto; border-radius: 8px; box-shadow: 0 5px 18px #00000018; }
+#visitor .sk-hero-photo-stack .sk-hero-detail-photo { display: block; width: 100%; height: auto; border-radius: 8px; box-shadow: 0 5px 18px #00000018; }
 
 #visitor .proof-band {
   --sk-band-line: #ffffff29;
@@ -602,7 +602,6 @@ body.guest-mode #visitor .sk-inst-aside { width: 100%; max-width: 400px; justify
   #visitor .hero-actions .hero-primary { min-width: 133px; }
   body.guest-mode #visitor .hero-footnote { margin-top: 18px; font-size: 10px; }
   body.guest-mode #visitor .hero-photo-wrap { order: 2; width: 100%; height: auto; min-height: 0; max-height: none; padding: 28px 0 0; }
-  #visitor .sk-hero-photo-stack .sk-hero-detail-photo { width: 100%; }
   #visitor .proof-inner > div { gap: 13px; min-height: 64px; padding: 8px 0 8px 18px; }
   #visitor .proof-inner strong { font-size: 25px; }
   #visitor .proof-inner span { font-size: 9px; letter-spacing: .035em; }
